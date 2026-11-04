@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Logo from './Logo'
 import { openDemo } from '../lib/openDemo'
 import './Nav.css'
+import { useDialog } from '../hooks/useDialog'
 
 const LINKS = [
   { label: 'How it works', href: '#flow' },
@@ -15,6 +16,9 @@ export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState('')
+  const dialogRef = useRef<HTMLDialogElement>(null)
+  const close = useCallback(() => setOpen(false), [])
+  useDialog(dialogRef, open, close)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -43,13 +47,12 @@ export default function Nav() {
     return () => obs.disconnect()
   }, [])
 
-  // lock body scroll while the mobile sheet is open
   useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : ''
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [open])
+    const media = matchMedia('(min-width: 901px)')
+    const resize = () => { if (media.matches) setOpen(false) }
+    media.addEventListener('change', resize)
+    return () => media.removeEventListener('change', resize)
+  }, [])
 
   return (
     <header className={`nav ${scrolled ? 'is-scrolled' : ''}`}>
@@ -77,6 +80,7 @@ export default function Nav() {
             className={`nav__burger ${open ? 'is-open' : ''}`}
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
+            aria-controls="mobile-navigation"
             onClick={() => setOpen((v) => !v)}
           >
             <span />
@@ -86,8 +90,9 @@ export default function Nav() {
       </div>
 
       {/* mobile sheet */}
-      <div className={`nav__sheet ${open ? 'is-open' : ''}`} onClick={() => setOpen(false)}>
+      <dialog ref={dialogRef} id="mobile-navigation" aria-label="Mobile navigation" className={`nav__sheet ${open ? 'is-open' : ''}`} onClick={close}>
         <div className="nav__sheetInner" onClick={(e) => e.stopPropagation()}>
+          <button className="btn btn-ghost" onClick={close}>Close menu</button>
           {LINKS.map((l) => (
             <a key={l.href} href={l.href} className="nav__sheetLink" onClick={() => setOpen(false)}>
               {l.label}
@@ -103,7 +108,7 @@ export default function Nav() {
             Book a demo
           </button>
         </div>
-      </div>
+      </dialog>
     </header>
   )
 }

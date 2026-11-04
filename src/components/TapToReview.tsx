@@ -1,3 +1,6 @@
+import { useEffect, useRef } from 'react'
+import { useReducedMotion } from '../hooks/useReducedMotion'
+import { usePageVisible } from '../hooks/usePageVisible'
 import Reveal from './Reveal'
 import ReviewPhone from './ReviewPhone'
 import TryDemo from './TryDemo'
@@ -7,14 +10,29 @@ import './TapToReview.css'
 const STEPS = [
   { n: '01', t: 'Tap the card', b: 'A guest taps their phone — or scans the QR. No app, no sign-up.' },
   { n: '02', t: 'Private feedback', b: 'A quiet page opens. Only you see the honest answers.' },
-  { n: '03', t: 'AI drafts the review', b: 'Revora turns their answers into a warm Google review — in seconds.' },
-  { n: '04', t: 'Posted in one tap', b: 'Happy guests post it instantly. Your public rating grows.' },
+  { n: '03', t: 'Review a draft', b: 'Explore an example draft based on the feedback. Guests can edit it in their own words.' },
+  { n: '04', t: 'Choose to share', b: 'Guests choose whether to share their honest review on Google.' },
 ]
 
 export default function TapToReview() {
   // only load the (heavy) tap video once the section is near the viewport
   const [tapRef, tapInView] = useInView<HTMLDivElement>({ rootMargin: '300px' })
 
+  const reduced = useReducedMotion()
+  const visible = usePageVisible()
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection
+  const playVideo = tapInView && !reduced && !connection?.saveData
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && visible) void video.play().catch(() => {})
+      else video.pause()
+    })
+    observer.observe(video)
+    return () => { observer.disconnect(); video.pause() }
+  }, [playVideo, visible])
   return (
     <section className="section flow" id="flow">
       <div className="container">
@@ -22,8 +40,8 @@ export default function TapToReview() {
           <span className="eyebrow">How it works</span>
           <h2 className="h2">One tap, and the review writes itself.</h2>
           <p className="lead flow__lead">
-            Watch what a guest sees — from the tap on the table to a posted Google
-            review, in about sixty seconds.
+            Watch what a guest sees — from the tap on the table to an editable example
+            review. Nothing is submitted by this demo.
           </p>
         </Reveal>
 
@@ -33,11 +51,11 @@ export default function TapToReview() {
             <div className="flow__tapMedia" ref={tapRef}>
               <span className="flow__ripple" aria-hidden="true" />
               <span className="flow__ripple flow__ripple--2" aria-hidden="true" />
-              {tapInView ? (
+              {playVideo ? (
                 <video
+                  ref={videoRef}
                   src="/assets/revora-tap.mp4"
                   poster="/assets/poster.jpg"
-                  autoPlay
                   muted
                   loop
                   playsInline
@@ -70,7 +88,7 @@ export default function TapToReview() {
 
         <Reveal className="flow__try">
           <TryDemo label="Try it yourself" />
-          <span className="flow__tryNote mono">No sign-up — it opens the real guest flow</span>
+          <span className="flow__tryNote mono">Interactive sample — no feedback is submitted</span>
         </Reveal>
 
         <ol className="flow__steps">

@@ -1,10 +1,14 @@
-import { useEffect, useRef } from 'react'
-import maplibregl from 'maplibre-gl'
+import { useEffect, useRef, useState } from 'react'
+import * as maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import mapWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 import { useInView } from '../hooks/useInView'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import Reveal from '../components/Reveal'
 import './MumbaiMap.css'
+
+// Bundle the module worker explicitly; dependency prebundling changes import.meta.url.
+maplibregl.setWorkerUrl(mapWorkerUrl)
 
 const MUMBAI: [number, number] = [72.8777, 19.076]
 
@@ -27,20 +31,22 @@ export default function MumbaiMap() {
   const mapEl = useRef<HTMLDivElement>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
   const reduced = useReducedMotion()
+  const [unavailable, setUnavailable] = useState(false)
 
   useEffect(() => {
     if (!inView || mapRef.current || !mapEl.current) return
 
-    const map = new maplibregl.Map({
+    let map: maplibregl.Map
+    try { map = new maplibregl.Map({
       container: mapEl.current,
       style: 'https://tiles.openfreemap.org/styles/dark',
       center: MUMBAI,
       zoom: 11,
       pitch: 55,
       bearing: -18,
-      attributionControl: false,
+      attributionControl: {},
       interactive: true,
-    })
+    }) } catch { setUnavailable(true); return }
     mapRef.current = map
 
     // zoom + move: buttons for zoom, drag to pan, pinch/double-click to zoom.
@@ -49,15 +55,21 @@ export default function MumbaiMap() {
     map.addControl(new maplibregl.NavigationControl({ showCompass: true, visualizePitch: true }), 'top-right')
 
     let spinning = !reduced
-    const stopSpin = () => { spinning = false }
+    let frame = 0
+    let disposed = false
+    let loaded = false
+    let onScreen = false
+    const stopSpin = () => { spinning = false; cancelAnimationFrame(frame) }
     map.on('dragstart', stopSpin)
     map.on('zoomstart', stopSpin)
 
     map.on('load', () => {
+      if (disposed) return
+      loaded = true
       map.resize()
 
       try {
-        map.addLayer({
+        if (map.getSource('openmaptiles')) map.addLayer({
           id: 'revora-buildings',
           type: 'fill-extrusion',
           source: 'openmaptiles',
@@ -98,19 +110,34 @@ export default function MumbaiMap() {
         new maplibregl.Marker({ element: el, anchor: 'bottom' }).setLngLat([s.lng, s.lat]).addTo(map)
       })
 
-      if (!reduced) {
-        const spin = () => {
-          if (!mapRef.current) return
-          if (spinning) map.setBearing(map.getBearing() + 0.02)
-          requestAnimationFrame(spin)
-        }
-        requestAnimationFrame(spin)
-      }
+      startSpin()
     })
+    const spin = () => {
+      if (disposed || !spinning || !onScreen || document.hidden) { frame = 0; return }
+      map.setBearing(map.getBearing() + 0.02)
+      frame = requestAnimationFrame(spin)
+    }
+    const startSpin = () => {
+      if (loaded && spinning && onScreen && !document.hidden && !frame) frame = requestAnimationFrame(spin)
+    }
+    const visibility = () => {
+      cancelAnimationFrame(frame); frame = 0
+      startSpin()
+    }
+    const observer = new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting; visibility() })
+    observer.observe(mapEl.current)
+    document.addEventListener('visibilitychange', visibility)
 
+    map.on('error', () => {
+      setUnavailable(true)
+    })
     const onResize = () => map.resize()
     window.addEventListener('resize', onResize)
     return () => {
+      disposed = true
+      observer.disconnect()
+      document.removeEventListener('visibilitychange', visibility)
+      cancelAnimationFrame(frame)
       window.removeEventListener('resize', onResize)
       map.remove()
       mapRef.current = null
@@ -122,16 +149,17 @@ export default function MumbaiMap() {
       <div className="container">
         <Reveal className="mm__head">
           <span className="eyebrow">On the map</span>
-          <h2 className="h2">Venues going live across Mumbai.</h2>
-          <p className="lead mm__lead">Drag to explore, zoom to your street. Every pin is a venue growing its reputation with Revora.</p>
+          <h2 className="h2">Picture your venue on the map.</h2>
+          <p className="lead mm__lead">Explore an illustrative Mumbai map. Venue names, ratings, and pins are sample data, not customer locations.</p>
         </Reveal>
 
         <Reveal className="mm__box" delay={80}>
           <div className="mm__inner" ref={boxRef}>
-            <div className="mm__canvas" ref={mapEl} aria-label="Map of Revora venues across Mumbai" />
+            <div className="mm__canvas" ref={mapEl} aria-label="Illustrative map with sample venues across Mumbai" />
+            {unavailable && <p className="mm__fallback" role="status">The interactive map is unavailable. The locations shown are illustrative examples.</p>}
             <div className="mm__badge glass">
               <span className="mm__badgeDot" />
-              <span>Active in Mumbai</span>
+              <span>Sample locations</span>
             </div>
           </div>
         </Reveal>

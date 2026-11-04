@@ -27,7 +27,7 @@ const COLS: { title: string; links: Link[] }[] = [
     title: 'Company',
     links: [
       { label: 'Contact us', action: 'demo' },
-      { label: 'hello@revora.in', href: 'mailto:hello@revora.in' },
+      { label: 'revora.org.com@gmail.com', href: 'mailto:revora.org.com@gmail.com' },
     ],
   },
 ]

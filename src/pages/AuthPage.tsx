@@ -1,108 +1,72 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { supabase, supabaseConfigured, OWNER_EMAIL } from '../lib/supabase'
+import { supabase, supabaseConfigured } from '../lib/supabase'
 import './admin.css'
 
-const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
-
-export default function AuthPage({ mode }: { mode: 'login' | 'signup' }) {
+export default function AuthPage() {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [code, setCode] = useState('')
+  const [factorId, setFactorId] = useState('')
+  const [qr, setQr] = useState('')
   const [error, setError] = useState('')
-  const [notice, setNotice] = useState('')
   const [busy, setBusy] = useState(false)
-
-  const isSignup = mode === 'signup'
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
-    setError('')
-    setNotice('')
-    if (!emailOk(email)) return setError('Enter a valid email.')
-    if (password.length < 8) return setError('Password must be at least 8 characters.')
-    // owner-only: block anyone who isn't the configured owner
-    if (OWNER_EMAIL && email.trim().toLowerCase() !== OWNER_EMAIL) {
-      return setError('This console is owner-only.')
-    }
-    if (!supabase) return setError('Backend not connected yet. Add the Supabase keys first.')
-
-    setBusy(true)
+    if (!supabase || busy) return
+    setError(''); setBusy(true)
     try {
-      if (isSignup) {
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          // send any confirmation link back to the live dashboard, not localhost
-          options: { emailRedirectTo: `${window.location.origin}/dashboard` },
-        })
-        if (error) throw error
-        if (data.session) navigate('/dashboard')
-        else setNotice('Account created. Check your email to confirm, then sign in.')
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password })
-        if (error) throw error
-        navigate('/dashboard')
+      if (factorId) {
+        if (!/^\d{6}$/.test(code)) throw new Error('Enter the six-digit code from your authenticator.')
+        const { error } = await supabase.auth.mfa.challengeAndVerify({ factorId, code })
+        if (error) throw new Error('Verification failed. Check the code and try again.')
+        navigate('/dashboard', { replace: true })
+        return
+      }
+      const { error: loginError } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
+      if (loginError) throw new Error('Sign in failed. Check your credentials.')
+      setPassword('')
+      const { data: admin, error: adminError } = await supabase.rpc('is_admin')
+      if (adminError || admin !== true) {
+        await supabase.auth.signOut()
+        throw new Error('This account does not have admin access.')
+      }
+      const { data: factors, error: factorsError } = await supabase.auth.mfa.listFactors()
+      if (factorsError) throw new Error('Could not load account verification. Please sign in again.')
+      const verified = factors.totp.find(f => f.status === 'verified')
+      if (verified) setFactorId(verified.id)
+      else {
+        // Remove abandoned, unverified enrollments before creating a new one.
+        for (const factor of factors.all.filter(f => f.factor_type === 'totp' && f.status === 'unverified')) {
+          const { error } = await supabase.auth.mfa.unenroll({ factorId: factor.id })
+          if (error) throw new Error('Could not restart authenticator setup.')
+        }
+        const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp', friendlyName: 'REVORA owner' })
+        if (error) throw new Error('Could not set up the authenticator. Please try again.')
+        setFactorId(data.id)
+        setQr(data.totp.qr_code.startsWith('data:') ? data.totp.qr_code : `data:image/svg+xml;utf8,${encodeURIComponent(data.totp.qr_code)}`)
       }
     } catch (err) {
-      setError((err as Error).message || 'Something went wrong.')
-    } finally {
-      setBusy(false)
-    }
+      setError((err as Error).message)
+    } finally { setBusy(false) }
   }
 
-  return (
-    <div className="auth">
-      <div className="auth__card">
-        <Link to="/" className="auth__brand">
-          <span className="auth__mark" aria-hidden="true" />
-          <span className="auth__wm">REVORA</span>
-        </Link>
-        <h1 className="auth__title">{isSignup ? 'Create owner account' : 'Owner sign in'}</h1>
-        <p className="auth__sub">
-          {isSignup
-            ? 'This creates the single account that runs Revora.'
-            : 'Only the owner can access the console.'}
-        </p>
-
-        {!supabaseConfigured && (
-          <div className="auth__banner">
-            The backend isn’t connected yet. Add your Supabase keys (see docs/DASHBOARD-SETUP.md) to enable sign in.
-          </div>
-        )}
-
-        <form className="auth__form" onSubmit={submit} noValidate>
-          <label className="auth__field">
-            <span>Email</span>
-            <input type="email" value={email} autoComplete="email" onChange={(e) => setEmail(e.target.value)} placeholder="you@revora.in" />
-          </label>
-          <label className="auth__field">
-            <span>Password</span>
-            <input
-              type="password"
-              value={password}
-              autoComplete={isSignup ? 'new-password' : 'current-password'}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-            />
-          </label>
-
-          {error && <p className="auth__error" role="alert">{error}</p>}
-          {notice && <p className="auth__notice">{notice}</p>}
-
-          <button className="btn btn-primary auth__submit" type="submit" disabled={busy}>
-            {busy ? 'Please wait…' : isSignup ? 'Create account' : 'Sign in'}
-          </button>
-        </form>
-
-        <p className="auth__switch">
-          {isSignup ? (
-            <>Already set up? <Link to="/login">Sign in</Link></>
-          ) : (
-            <>First time? <Link to="/signup">Create the owner account</Link></>
-          )}
-        </p>
-      </div>
-    </div>
-  )
+  return <div className="auth"><div className="auth__card">
+    <Link to="/" className="auth__brand"><span className="auth__mark" aria-hidden="true" /><span className="auth__wm">REVORA</span></Link>
+    <h1 className="auth__title">{factorId ? 'Verify your sign in' : 'Owner sign in'}</h1>
+    <p className="auth__sub">Access is restricted to approved admins with two-step verification.</p>
+    {!supabaseConfigured && <div className="auth__banner">Owner sign in is currently unavailable.</div>}
+    {qr && <div><p>Scan this code with your authenticator app, then enter its six-digit code. Keep your authenticator private.</p><img src={qr} alt="Authenticator setup QR code" width="200" height="200" /></div>}
+    <form className="auth__form" onSubmit={submit}>
+      {factorId ? <label className="auth__field"><span>Authenticator code</span><input value={code} onChange={e => setCode(e.target.value)} autoComplete="one-time-code" inputMode="numeric" pattern="[0-9]{6}" maxLength={6} required /></label> : <>
+        <label className="auth__field"><span>Email</span><input type="email" value={email} onChange={e => setEmail(e.target.value)} autoComplete="username" maxLength={254} required /></label>
+        <label className="auth__field"><span>Password</span><input type="password" value={password} onChange={e => setPassword(e.target.value)} autoComplete="current-password" required /></label>
+      </>}
+      {error && <p className="auth__error" role="alert">{error}</p>}
+      <button className="btn btn-primary auth__submit" disabled={busy || !supabaseConfigured}>{busy ? 'Please wait…' : factorId ? 'Verify' : 'Sign in'}</button>
+    </form>
+    {factorId && <button className="btn btn-ghost" onClick={async () => { await supabase?.auth.signOut(); setFactorId(''); setQr(''); setCode(''); setError('') }}>Use another account</button>}
+  </div></div>
 }

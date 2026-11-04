@@ -4,13 +4,13 @@ import './WhyReviews.css'
 const POINTS = [
   {
     k: 'Rank',
-    t: 'Higher ratings rank first',
-    b: 'Maps and local search push the best-rated places to the top of the list.',
+    t: 'Reviews help you stand out',
+    b: 'Reviews are one part of local visibility, alongside relevance and distance.',
   },
   {
     k: 'Trust',
     t: 'Rating + count = instant trust',
-    b: 'More and better reviews win the click before anyone reads a word.',
+    b: 'Recent, honest reviews help guests decide whether your venue is right for them.',
   },
   {
     k: 'Fresh',
@@ -55,7 +55,7 @@ export default function WhyReviews() {
 
         <Reveal className="wr__widget glass" delay={120}>
           <div className="wr__widgetHead">
-            <span className="mono wr__widgetLabel">Local search · “restaurants near me”</span>
+            <span className="mono wr__widgetLabel">Illustrative example · not live Google rankings</span>
           </div>
           <ol className="wr__ranks">
             {RANKS.map((r, i) => (

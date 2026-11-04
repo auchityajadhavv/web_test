@@ -177,3 +177,7 @@
     display: none;
   }
 }
+
+dialog.nav__sheet { border: 0; margin: 0; width: 100%; height: calc(100% - 72px); max-width: none; max-height: none; color: var(--text); }
+dialog.nav__sheet:not([open]) { display: none; }
+dialog.nav__sheet::backdrop { background: rgba(6, 6, 11, .4); }

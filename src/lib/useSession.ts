@@ -2,23 +2,17 @@ import { useEffect, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { supabase } from './supabase'
 
-/** Tracks the Supabase auth session (null when signed out or unconfigured). */
 export function useSession() {
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
-
   useEffect(() => {
-    if (!supabase) {
-      setLoading(false)
-      return
-    }
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session)
-      setLoading(false)
+    let live = true
+    if (!supabase) { setLoading(false); return }
+    // Subscription sends INITIAL_SESSION; avoid racing a separate getSession call.
+    const { data } = supabase.auth.onAuthStateChange((_event, value) => {
+      if (live) { setSession(value); setLoading(false) }
     })
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSession(s))
-    return () => sub.subscription.unsubscribe()
+    return () => { live = false; data.subscription.unsubscribe() }
   }, [])
-
   return { session, loading }
 }

@@ -1,4 +1,3 @@
-import { Suspense, lazy } from 'react'
 import Starfield from './components/Starfield'
 import Nav from './components/Nav'
 import Hero from './components/Hero'
@@ -13,8 +12,7 @@ import Cta from './components/Cta'
 import Footer from './components/Footer'
 import DemoModal from './components/DemoModal'
 
-// map pulls in maplibre-gl (~200kb gzip) and lives below the fold → code-split it
-const MumbaiMap = lazy(() => import('./map/MumbaiMap'))
+import DeferredMap from './components/DeferredMap'
 
 export default function MarketingSite() {
   return (
@@ -27,9 +25,7 @@ export default function MarketingSite() {
         <WhyReviews />
         <WhyRevora />
         <InTheWild />
-        <Suspense fallback={<div style={{ minHeight: '60vh' }} />}>
-          <MumbaiMap />
-        </Suspense>
+        <DeferredMap />
         <Products />
         <Pricing />
         <Faq />

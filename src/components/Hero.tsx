@@ -2,21 +2,26 @@ import { Suspense, lazy } from 'react'
 import TryDemo from './TryDemo'
 import { openDemo } from '../lib/openDemo'
 import './Hero.css'
+import AmbientFallback from './AmbientFallback'
+import { useReducedMotion } from '../hooks/useReducedMotion'
 
 // defer the 3D field (three.js) so hero text paints immediately
 const AmbientField = lazy(() => import('../three/AmbientField'))
 
 const STATS = [
-  { big: '2×', label: 'Google reviews' },
-  { big: '60s', label: 'to go live' },
+  { big: 'NFC + QR', label: 'two ways to connect' },
+  { big: 'No app', label: 'for your guests' },
   { big: '1 tap', label: 'for guests' },
 ]
 
 export default function Hero() {
+  const reduced = useReducedMotion()
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection
+  const light = reduced || window.innerWidth < 720 || (navigator.hardwareConcurrency || 8) <= 4 || connection?.saveData || ['slow-2g', '2g'].includes(connection?.effectiveType || '')
   return (
     <section className="hero" id="top">
-      <Suspense fallback={null}>
-        <AmbientField />
+      <Suspense fallback={<AmbientFallback />}>
+        {light ? <AmbientFallback /> : <AmbientField />}
       </Suspense>
       <div className="hero__scrim" aria-hidden="true" />
 
@@ -26,8 +31,8 @@ export default function Hero() {
           Experiences that <span className="text-purple">matter.</span>
         </h1>
         <p className="lead hero__sub">
-          The premium way your guests tell you how it really went — one tap,
-          private feedback, then a Google review.
+          An NFC + QR stand for your counter. Guests tap to share feedback
+          and can choose to write a Google review.
         </p>
         <div className="hero__actions">
           <button className="btn btn-primary" onClick={() => openDemo()}>Book a demo</button>

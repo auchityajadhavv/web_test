@@ -44,6 +44,7 @@ export default function Pricing() {
         <Reveal className="pricing__head">
           <span className="eyebrow">Pricing</span>
           <h2 className="h2">Simple plans for real businesses.</h2>
+          <p className="lead">Ask our team to confirm hardware, installation, taxes, and feature availability before choosing a plan.</p>
         </Reveal>
 
         <div className="pricing__grid">

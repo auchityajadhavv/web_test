@@ -9,15 +9,15 @@ const QA = [
   },
   {
     q: 'How does Revora get more Google reviews without faking them?',
-    a: 'Every review is written and posted by a real guest. Revora just removes the friction: it drafts a genuine review from their own answers, so happy guests who never would have bothered can post in one tap.',
+    a: 'The interactive example creates a sample draft from the sliders. It does not publish anything. Guests should review and edit any draft so it reflects their own experience.',
   },
   {
     q: 'What happens when someone leaves negative feedback?',
-    a: 'Unhappy guests are routed to a private page instead of Google. You hear about the problem directly and get the chance to make it right — your public rating stays protected.',
+    a: 'Guests can share honest feedback across the full rating range. The example sends no data; ask our team about the private feedback workflow for your venue.',
   },
   {
     q: 'How long does setup take?',
-    a: 'Under a minute. Unbox the stand, place it on the counter, and tap it once to link it to your venue. That’s the whole install.',
+    a: 'We’ll confirm setup steps and timing during your demo, including linking the stand to your venue.',
   },
   {
     q: 'Which businesses is it for?',

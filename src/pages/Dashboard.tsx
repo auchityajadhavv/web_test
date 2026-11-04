@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
-import { supabase, supabaseConfigured, OWNER_EMAIL } from '../lib/supabase'
+import { supabase, supabaseConfigured } from '../lib/supabase'
 import { useSession } from '../lib/useSession'
 import './admin.css'
 
@@ -13,6 +13,7 @@ type DemoRequest = {
   message: string | null
   plan: string | null
   status: Status
+  notification_sent: boolean
   created_at: string
 }
 
@@ -25,9 +26,28 @@ export default function Dashboard() {
   const [fetching, setFetching] = useState(true)
   const [err, setErr] = useState('')
   const [filter, setFilter] = useState<'all' | Status>('all')
+  const [page, setPage] = useState(0)
+  const [hasMore, setHasMore] = useState(false)
+  const [refresh, setRefresh] = useState(0)
+  const [updating, setUpdating] = useState<string[]>([])
+  const [authorizedToken, setAuthorizedToken] = useState('')
+  const [checking, setChecking] = useState(true)
 
   const email = session?.user?.email?.toLowerCase()
-  const isOwner = !OWNER_EMAIL || email === OWNER_EMAIL
+  const isOwner = Boolean(session && authorizedToken === session.access_token)
+  useEffect(() => {
+    let live = true
+    setChecking(true)
+    setAuthorizedToken('')
+    setRows([])
+    if (!session || !supabase) { setChecking(false); return }
+    supabase.rpc('is_admin_session').then(({ data, error }) => {
+      if (!live) return
+      if (!error && data === true) setAuthorizedToken(session.access_token)
+      setChecking(false)
+    }, () => { if (live) setChecking(false) })
+    return () => { live = false }
+  }, [session])
 
   useEffect(() => {
     const sb = supabase
@@ -35,28 +55,23 @@ export default function Dashboard() {
     let live = true
     const load = async () => {
       setFetching(true)
-      const { data, error } = await sb
-        .from('demo_requests')
-        .select('*')
-        .order('created_at', { ascending: false })
-      if (!live) return
-      if (error) setErr(error.message)
-      else setRows((data as DemoRequest[]) || [])
-      setFetching(false)
+      setErr('')
+      let query = sb.from('demo_requests')
+        .select('id,name,venue,email,message,plan,status,created_at,notification_sent')
+        .order('created_at', { ascending: false }).order('id', { ascending: false })
+        .range(page * 25, page * 25 + 25)
+      if (filter !== 'all') query = query.eq('status', filter)
+      try {
+        const { data, error } = await query
+        if (!live) return
+        if (error) { setRows([]); setErr('Could not load requests. Please refresh or sign in again.') }
+        else { setRows((data as DemoRequest[] || []).slice(0, 25)); setHasMore((data?.length || 0) > 25) }
+      } catch { if (live) { setRows([]); setErr('Could not load requests. Please retry.') } }
+      finally { if (live) setFetching(false) }
     }
-    load()
-    // realtime: new submissions appear without a refresh
-    const ch = sb
-      .channel('demo_requests')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'demo_requests' }, (p) => {
-        setRows((r) => [p.new as DemoRequest, ...r])
-      })
-      .subscribe()
-    return () => {
-      live = false
-      sb.removeChannel(ch)
-    }
-  }, [session, isOwner])
+    void load()
+    return () => { live = false }
+  }, [session, isOwner, filter, page, refresh])
 
   const stats = useMemo(() => {
     const weekAgo = Date.now() - 7 * 864e5
@@ -70,8 +85,15 @@ export default function Dashboard() {
   const shown = filter === 'all' ? rows : rows.filter((r) => r.status === filter)
 
   async function setStatus(id: string, status: Status) {
-    setRows((r) => r.map((x) => (x.id === id ? { ...x, status } : x)))
-    await supabase?.from('demo_requests').update({ status }).eq('id', id)
+    if (!supabase || !isOwner || updating.includes(id)) return
+    setUpdating(ids => [...ids, id])
+    setErr('')
+    try {
+      const { data, error } = await supabase.from('demo_requests').update({ status }).eq('id', id).select('id').single()
+      if (error || !data) throw new Error('Update failed')
+      setRefresh(value => value + 1)
+    } catch { setErr('Status was not saved. Please retry or sign in again.') }
+    finally { setUpdating(ids => ids.filter(value => value !== id)) }
   }
 
   async function signOut() {
@@ -85,20 +107,21 @@ export default function Dashboard() {
       <AdminShell>
         <div className="dash__notice">
           <h1>Backend not connected</h1>
-          <p>Add your Supabase keys (see <code>docs/DASHBOARD-SETUP.md</code>) to enable the owner console.</p>
+          <p>Owner access is currently unavailable.</p>
           <Link to="/" className="btn btn-ghost">← Back to site</Link>
         </div>
       </AdminShell>
     )
   }
-  if (loading) return <AdminShell><div className="dash__notice"><p className="mono">Loading…</p></div></AdminShell>
+  if (loading || checking) return <AdminShell><div className="dash__notice"><p className="mono">Loading…</p></div></AdminShell>
   if (!session) return <Navigate to="/login" replace />
   if (!isOwner) {
     return (
       <AdminShell>
         <div className="dash__notice">
-          <h1>Not authorised</h1>
-          <p>This console is owner-only. You’re signed in as {email}.</p>
+          <h1>Admin verification required</h1>
+          <p>This account needs admin approval and authenticator verification.</p>
+          <Link to="/login" className="btn btn-primary">Verify sign in</Link>
           <button className="btn btn-ghost" onClick={signOut}>Sign out</button>
         </div>
       </AdminShell>
@@ -119,9 +142,9 @@ export default function Dashboard() {
       </header>
 
       <div className="dash__stats">
-        <Stat label="Total requests" value={stats.total} />
-        <Stat label="New / unactioned" value={stats.newCount} accent />
-        <Stat label="This week" value={stats.week} />
+        <Stat label="Requests on this page" value={stats.total} />
+        <Stat label="New on this page" value={stats.newCount} accent />
+        <Stat label="This week on this page" value={stats.week} />
       </div>
 
       <div className="dash__toolbar">
@@ -130,7 +153,8 @@ export default function Dashboard() {
             <button
               key={f}
               className={`dash__filter ${filter === f ? 'is-active' : ''}`}
-              onClick={() => setFilter(f)}
+              onClick={() => { setFilter(f); setPage(0) }}
+              aria-pressed={filter === f}
             >
               {f}
             </button>
@@ -138,7 +162,8 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {err && <p className="auth__error">{err}</p>}
+      <button className="btn btn-ghost" onClick={() => setRefresh(value => value + 1)}>Refresh requests</button>
+      {err && <p className="auth__error" role="alert">{err}</p>}
 
       {fetching ? (
         <p className="mono dash__empty">Loading requests…</p>
@@ -155,6 +180,7 @@ export default function Dashboard() {
                 <th>Plan</th>
                 <th>Message</th>
                 <th>When</th>
+                <th>Email notification</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -167,10 +193,13 @@ export default function Dashboard() {
                   <td data-th="Plan">{r.plan || '—'}</td>
                   <td data-th="Message" className="dash__msg">{r.message || '—'}</td>
                   <td data-th="When" className="mono">{new Date(r.created_at).toLocaleDateString()}</td>
+                  <td data-th="Email notification">{r.notification_sent ? 'Accepted by email service' : 'Pending — check delivery'}</td>
                   <td data-th="Status">
                     <select
                       className={`dash__status is-${r.status}`}
                       value={r.status}
+                      aria-label={`Status for ${r.name}`}
+                      disabled={updating.includes(r.id)}
                       onChange={(e) => setStatus(r.id, e.target.value as Status)}
                     >
                       {STATUSES.map((s) => (
@@ -184,6 +213,11 @@ export default function Dashboard() {
           </table>
         </div>
       )}
+      <div className="dash__toolbar" aria-label="Request pages">
+        <button className="btn btn-ghost" disabled={page === 0 || fetching} onClick={() => setPage(value => value - 1)}>Previous</button>
+        <span>Page {page + 1}</span>
+        <button className="btn btn-ghost" disabled={!hasMore || fetching} onClick={() => setPage(value => value + 1)}>Next</button>
+      </div>
     </AdminShell>
   )
 }

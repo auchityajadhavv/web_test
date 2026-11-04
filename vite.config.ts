@@ -4,17 +4,6 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: { host: true, port: 5173 },
-  build: {
-    rollupOptions: {
-      output: {
-        // split heavy vendors so they cache independently of app code
-        manualChunks: {
-          three: ['three', '@react-three/fiber', '@react-three/drei'],
-          react: ['react', 'react-dom'],
-          supabase: ['@supabase/supabase-js'],
-        },
-      },
-    },
-    chunkSizeWarningLimit: 900,
-  },
+  // Dynamic imports isolate the map, 3D scene and owner pages with Vite 8's bundler.
+  build: { chunkSizeWarningLimit: 900 },
 })

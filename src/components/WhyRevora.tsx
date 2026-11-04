@@ -5,27 +5,27 @@ import './WhyRevora.css'
 const CELLS = [
   {
     span: 'wide',
-    stat: '2×',
-    title: 'More reviews',
-    body: 'Turn quiet, happy guests into public reviews — most venues roughly double their monthly count.',
+    stat: 'NFC + QR',
+    title: 'Make feedback easier',
+    body: 'Give guests a simple way to share their experience. Results depend on your venue and participation.',
   },
   {
     span: 'tall',
     stat: null,
     title: 'Catch issues privately',
-    body: 'Unhappy guests are routed to a private page first, so problems reach you — not your public rating.',
+    body: 'Give guests a private way to explain a problem, while keeping their choice to share an honest public review.',
   },
   {
     span: 'small',
     stat: null,
     title: 'See what guests think',
-    body: 'Every answer, in one clear dashboard.',
+    body: 'Explore the guest feedback experience, then discuss reporting options with our team.',
   },
   {
     span: 'small',
-    stat: '<60s',
-    title: 'Live in under a minute',
-    body: 'Unbox, place, tap. That’s setup.',
+    stat: 'No app',
+    title: 'A familiar way to connect',
+    body: 'Tap an NFC-enabled phone or scan the QR code to open the feedback page.',
   },
   {
     span: 'wide',

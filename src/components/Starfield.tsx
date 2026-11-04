@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { usePageVisible } from '../hooks/usePageVisible'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import './Starfield.css'
 
@@ -12,6 +13,7 @@ type Star = { x: number; y: number; z: number; r: number; tw: number }
 export default function Starfield() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const reduced = useReducedMotion()
+  const visible = usePageVisible()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -72,19 +74,19 @@ export default function Starfield() {
     }
 
     build()
-    if (reduced) {
+    if (reduced || !visible) {
       draw(0)
     } else {
       raf = requestAnimationFrame(tick)
     }
 
-    const onResize = () => build()
+    const onResize = () => { build(); if (reduced || !visible) draw(0) }
     window.addEventListener('resize', onResize)
     return () => {
       cancelAnimationFrame(raf)
       window.removeEventListener('resize', onResize)
     }
-  }, [reduced])
+  }, [reduced, visible])
 
   return (
     <div className="starfield" aria-hidden="true">

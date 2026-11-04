@@ -4,7 +4,6 @@ import MarketingSite from './MarketingSite'
 
 // the admin area is code-split so none of it ships with the marketing site
 const Login = lazy(() => import('./pages/Login'))
-const Signup = lazy(() => import('./pages/Signup'))
 const Dashboard = lazy(() => import('./pages/Dashboard'))
 
 export default function App() {
@@ -17,14 +16,6 @@ export default function App() {
           element={
             <Suspense fallback={null}>
               <Login />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            <Suspense fallback={null}>
-              <Signup />
             </Suspense>
           }
         />

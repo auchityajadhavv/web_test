@@ -226,3 +226,5 @@
   border: 1.5px solid rgba(196, 166, 255, 0.7);
   animation: mm-pulse 2s ease-out infinite;
 }
+
+.mm__fallback { position: absolute; inset: 0; display: grid; place-content: center; padding: 32px; background: var(--card); color: var(--text2); text-align: center; z-index: 2; }
