@@ -165,3 +165,38 @@ test('the upgraded map starts its worker and renders sample markers', async ({ p
   await expect(page.getByRole('status')).toHaveCount(0)
   expect(errors).toEqual([])
 })
+
+test('password setup requires an authenticated approved admin', async ({ page }) => {
+  await page.goto('/set-password')
+  await expect(page.getByRole('alert')).toContainText('Open the latest admin invitation')
+  await expect(page.getByLabel('New password', { exact: true })).toHaveCount(0)
+  await session(page, false)
+  await page.route('**/rest/v1/rpc/is_admin', route => route.fulfill({ contentType: 'application/json', body: 'false' }))
+  await page.reload()
+  await expect(page.getByRole('alert')).toContainText('account must be approved')
+  await expect(page.getByLabel('New password', { exact: true })).toHaveCount(0)
+})
+
+test('invited admin saves a matching password and returns to login for MFA', async ({ page }) => {
+  await session(page, true)
+  await page.route('**/rest/v1/rpc/is_admin', route => route.fulfill({ contentType: 'application/json', body: 'true' }))
+  let updates = 0
+  await page.route('**/auth/v1/user', route => {
+    expect(route.request().method()).toBe('PUT')
+    expect(route.request().postDataJSON().password).toBe('private-test-password')
+    updates++
+    return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ id: '11111111-1111-4111-8111-111111111111', email: 'owner@example.com' }) })
+  })
+  await page.route('**/auth/v1/logout*', route => route.fulfill({ status: 204 }))
+  await page.goto('/set-password')
+  await page.getByLabel('New password', { exact: true }).fill('private-test-password')
+  await page.getByLabel('Confirm password', { exact: true }).fill('different-password')
+  await page.getByRole('button', { name: 'Save password' }).click()
+  await expect(page.getByRole('alert')).toContainText('do not match')
+  expect(updates).toBe(0)
+  await page.getByLabel('Confirm password', { exact: true }).fill('private-test-password')
+  await page.getByRole('button', { name: 'Save password' }).click()
+  await expect(page).toHaveURL(/\/login\?setup=complete$/)
+  await expect(page.getByRole('status')).toContainText('Password saved')
+  expect(updates).toBe(1)
+})

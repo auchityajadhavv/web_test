@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase, supabaseConfigured } from '../lib/supabase'
 import './admin.css'
 
 export default function AuthPage() {
   const navigate = useNavigate()
+  const [params] = useSearchParams()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [code, setCode] = useState('')
@@ -57,6 +58,7 @@ export default function AuthPage() {
     <Link to="/" className="auth__brand"><span className="auth__mark" aria-hidden="true" /><span className="auth__wm">REVORA</span></Link>
     <h1 className="auth__title">{factorId ? 'Verify your sign in' : 'Owner sign in'}</h1>
     <p className="auth__sub">Access is restricted to approved admins with two-step verification.</p>
+    {params.get('setup') === 'complete' && <p role="status">Password saved. Sign in to continue with authenticator verification.</p>}
     {!supabaseConfigured && <div className="auth__banner">Owner sign in is currently unavailable.</div>}
     {qr && <div><p>Scan this code with your authenticator app, then enter its six-digit code. Keep your authenticator private.</p><img src={qr} alt="Authenticator setup QR code" width="200" height="200" /></div>}
     <form className="auth__form" onSubmit={submit}>

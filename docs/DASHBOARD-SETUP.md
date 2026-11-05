@@ -20,7 +20,7 @@ The frontend never receives a service-role key or email API key. Admins can sele
 
 1. Back up existing data and review `supabase/schema.sql`. Apply it using the project's SQL editor. It upgrades the old table in place, removes the previous email-based/public-insert policies, creates the approved-admin list and rate limiter, and can be reapplied. Do not keep old permissive policies alongside these rules.
 2. Disable **Allow new users to sign up** in Auth settings. The website has no signup route; disabling it at the provider prevents direct API signup too.
-3. Create/invite the owner in Supabase Auth and complete any invitation/password setup. Copy the exact user's UUID. With administrator privileges, run:
+3. Create/invite the owner in Supabase Auth. For an invitation, allowlist the exact deployed `/set-password` callback and use it as the invitation redirect. That page accepts an authenticated, approved account, saves the password through Supabase Auth, then sends the user back to login for MFA. Do not share invitation tokens or passwords in chat. Copy the exact user's UUID. With administrator privileges, run:
 
    ```sql
    insert into public.admin_users(user_id) values ('EXACT-AUTH-USER-UUID');
