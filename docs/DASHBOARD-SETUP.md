@@ -1,5 +1,15 @@
 # Private owner console and demo notifications
 
+## Project configuration
+
+- Supabase project reference: `njshdrkipvbjbeinircm` (provided by the owner).
+- Standard project API URL: `https://njshdrkipvbjbeinircm.supabase.co` (confirm against project settings before deployment).
+- Website origin: `https://revora-live.vercel.app`.
+- Turnstile hostname: `revora-live.vercel.app`.
+- Demo notification recipient: `revora.org.com@gmail.com`.
+
+These values are prepared in the example configuration files. They have not been applied to the live project. Management access must be authenticated before the schema, Auth settings, owner account or function can be deployed.
+
 ## Access model
 
 `/dashboard` is a public route name, not a secret. It reveals no private requests unless Supabase verifies a signed session belonging to an explicitly approved user UUID **and** an MFA session (`aal2`). PostgreSQL row-level security enforces this for direct REST requests as well as the website. Editing a URL, frontend code, local storage or a client-side email variable cannot grant database permissions. Public source code and marketing assets are intentionally accessible.
@@ -39,7 +49,7 @@ The database applies atomic hourly limits: 5 new attempts per hashed client IP, 
 Deploy with the Supabase CLI from the checkout:
 
 ```bash
-supabase functions deploy request-demo
+supabase functions deploy request-demo --project-ref njshdrkipvbjbeinircm
 ```
 
 `supabase/config.toml` must be included so the configured JWT behavior applies. Review the function and SQL before deployment. This repository's local validation does not deploy either one.
