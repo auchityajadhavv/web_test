@@ -1,66 +1,43 @@
-import ArrowIcon from "./ArrowIcon";
 import Reveal from "./Reveal";
 import "./WhyRevora.css";
 
-// bento benefits — sizes vary to make the grid feel composed, not templated
-const CELLS = [
+const BENEFITS = [
   {
-    span: "wide",
-    stat: "NFC + QR",
-    title: "Make feedback easier",
-    body: "Give guests a simple way to share their experience. Results depend on your venue and participation.",
+    title: "An easier invitation.",
+    body: "NFC or QR. Your guests open the experience on their own phone, with no app to download.",
   },
   {
-    span: "tall",
-    stat: null,
-    title: "Catch issues privately",
-    body: "Give guests a private way to explain a problem, while keeping their choice to share an honest public review.",
+    title: "Their words. Their choice.",
+    body: "A space for honest feedback and an editable review draft. Sharing publicly stays with the guest.",
   },
   {
-    span: "small",
-    stat: null,
-    title: "See what guests think",
-    body: "Explore the guest feedback experience, then discuss reporting options with our team.",
-  },
-  {
-    span: "small",
-    stat: "No app",
-    title: "A familiar way to connect",
-    body: "Tap an NFC-enabled phone or scan the QR code to open the feedback page.",
-  },
-  {
-    span: "wide",
-    stat: null,
-    title: "Built for every counter",
-    body: "Restaurants, cafés, salons, hotels, gyms, clinics, retail — anywhere a guest leaves with an opinion.",
+    title: "A considered detail.",
+    body: "Black acrylic, brushed gold, and a place on your counter. Explore branding that fits your venue.",
   },
 ];
-
 export default function WhyRevora() {
   return (
     <section className="section wrv" id="why">
       <div className="container">
         <Reveal className="wrv__head">
-          <span className="eyebrow">Why Revora</span>
-          <h2 className="h2">Protect your reputation. Grow it in public.</h2>
+          <span className="eyebrow">The thinking behind Revora</span>
+          <h2 className="h2">
+            Less friction.
+            <br />
+            More connection.
+          </h2>
         </Reveal>
-
-        <div className="wrv__bento">
-          {CELLS.map((c, i) => (
+        <div className="wrv__benefits">
+          {BENEFITS.map((benefit, i) => (
             <Reveal
               as="article"
-              key={c.title}
-              className={`wrv__cell glass wrv__cell--${c.span}`}
+              className="wrv__benefit"
+              key={benefit.title}
               delay={i * 60}
             >
-              {c.span === "tall" && (
-                <span className="wrv__icon">
-                  <ArrowIcon />
-                </span>
-              )}
-              {c.stat && <span className="mono wrv__stat">{c.stat}</span>}
-              <h3 className="wrv__cellTitle">{c.title}</h3>
-              <p className="wrv__cellBody">{c.body}</p>
+              <span className="mono wrv__number">0{i + 1}</span>
+              <h3>{benefit.title}</h3>
+              <p>{benefit.body}</p>
             </Reveal>
           ))}
         </div>

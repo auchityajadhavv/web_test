@@ -1,66 +1,20 @@
 .logo {
   display: inline-flex;
   align-items: center;
-  gap: 11px;
+  gap: 10px;
 }
-
-/* fixed tilt; the sphere inside spins on Y (the "tumble" from the reference) */
 .logo__mark {
-  width: 26px;
-  height: 26px;
+  display: block;
   position: relative;
-  transform: rotateX(16deg);
-  transform-style: preserve-3d;
-  filter: drop-shadow(0 0 5px rgba(154, 127, 214, 0.4));
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
 }
-
-.logo__sphere {
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  animation: logo-tumble 9s linear infinite;
+.logo__mark canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
-@keyframes logo-tumble {
-  to {
-    transform: rotateY(360deg);
-  }
-}
-
-.logo__ring {
-  position: absolute;
-  inset: 0;
-  border: 1px solid rgba(226, 220, 245, 0.32);
-  border-radius: 50%;
-}
-.logo__ring--tilt {
-  border-color: rgba(154, 127, 214, 0.6);
-  transform: rotateX(66deg);
-}
-
-/* the dot rides the tilted ring plane, at its edge → orbits as the sphere spins */
-.logo__dotWrap {
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  transform: rotateX(66deg);
-}
-.logo__dot {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 4.5px;
-  height: 4.5px;
-  margin: -2.25px 0 0 -2.25px;
-  border-radius: 50%;
-  background: var(--lilac);
-  box-shadow: 0 0 9px var(--lilac), 0 0 4px #fff;
-  transform: translateX(11px);
-}
-
-.logo__mark.is-static .logo__sphere {
-  animation: none;
-}
-
 .logo__wordmark {
   height: 22px;
   width: auto;
