@@ -51,11 +51,13 @@
 }
 .faq__icon::before,
 .faq__icon::after {
-  content: '';
+  content: "";
   position: absolute;
   background: var(--lilac2);
   border-radius: 2px;
-  transition: transform var(--dur-micro) var(--ease-out), opacity var(--dur-micro) var(--ease-out);
+  transition:
+    transform var(--dur-micro) var(--ease-out),
+    opacity var(--dur-micro) var(--ease-out);
 }
 .faq__icon::before {
   top: 7px;
@@ -101,4 +103,16 @@
   .faq__head {
     position: static;
   }
+}
+
+.faq__aWrap[hidden] {
+  display: none;
+}
+.faq__q {
+  font-weight: 500;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+.faq__a {
+  font-size: 0.88rem;
 }

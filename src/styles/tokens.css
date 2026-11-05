@@ -7,7 +7,12 @@
 :root {
   /* ---- UI (purple + black) ---- */
   --bg: #08080d;
-  --bg-grad: radial-gradient(105% 90% at 60% 30%, #15151f 0%, #0d0d15 50%, #08080d 100%);
+  --bg-grad: radial-gradient(
+    105% 90% at 60% 30%,
+    #15151f 0%,
+    #0d0d15 50%,
+    #08080d 100%
+  );
   --card: #0e0e10;
   --glass: linear-gradient(150deg, #ffffff0e, #ffffff03);
   --glass-strong: linear-gradient(150deg, #ffffff16, #ffffff05);
@@ -20,8 +25,8 @@
   --lilac2: #c4a6ff;
 
   --text: #ffffff;
-  --text2: #a99bcb;
-  --text3: #8f83ac;
+  --text2: #b3afbf;
+  --text3: #928c9f;
 
   /* pale-lavender pill button, dark text */
   --btn: linear-gradient(92deg, #e7e0f5, #c3b6e6);
@@ -34,9 +39,9 @@
   --card-black: #0a0a0a; /* matte neutral, no blue/purple */
 
   /* ---- type ---- */
-  --font-display: 'Satoshi', 'Inter', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', monospace;
+  --font-display: "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", monospace;
 
   /* ---- scale ---- */
   --radius: 18px;
@@ -44,7 +49,7 @@
   --radius-lg: 24px;
   --maxw: 1240px;
   --gutter: clamp(20px, 5vw, 64px);
-  --section-y: clamp(80px, 12vh, 160px);
+  --section-y: clamp(64px, 8vw, 108px);
 
   /* shadows / glow */
   --shadow-card: 0 24px 60px -20px rgba(0, 0, 0, 0.7);
@@ -61,7 +66,13 @@
 .hairline {
   height: 1px;
   border: 0;
-  background: linear-gradient(90deg, transparent, rgba(201, 162, 75, 0.45) 30%, rgba(201, 162, 75, 0.2) 70%, transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(201, 162, 75, 0.45) 30%,
+    rgba(201, 162, 75, 0.2) 70%,
+    transparent
+  );
 }
 
 /* fluid type scale */
@@ -70,7 +81,7 @@
   --fs-body: clamp(0.95rem, 0.9rem + 0.3vw, 1.06rem);
   --fs-lead: clamp(1.05rem, 0.98rem + 0.6vw, 1.3rem);
   --fs-h3: clamp(1.25rem, 1.05rem + 1vw, 1.7rem);
-  --fs-h2: clamp(2rem, 1.4rem + 3vw, 3.6rem);
+  --fs-h2: clamp(2rem, 1.25rem + 2.5vw, 3.15rem);
   --fs-h1: clamp(2.7rem, 1.6rem + 5.4vw, 5.6rem);
   --fs-display: clamp(3rem, 1.5rem + 7vw, 7rem);
 }

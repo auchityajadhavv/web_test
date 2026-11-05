@@ -1,39 +1,40 @@
-import Reveal from './Reveal'
-import './WhyRevora.css'
+import ArrowIcon from "./ArrowIcon";
+import Reveal from "./Reveal";
+import "./WhyRevora.css";
 
 // bento benefits — sizes vary to make the grid feel composed, not templated
 const CELLS = [
   {
-    span: 'wide',
-    stat: 'NFC + QR',
-    title: 'Make feedback easier',
-    body: 'Give guests a simple way to share their experience. Results depend on your venue and participation.',
+    span: "wide",
+    stat: "NFC + QR",
+    title: "Make feedback easier",
+    body: "Give guests a simple way to share their experience. Results depend on your venue and participation.",
   },
   {
-    span: 'tall',
+    span: "tall",
     stat: null,
-    title: 'Catch issues privately',
-    body: 'Give guests a private way to explain a problem, while keeping their choice to share an honest public review.',
+    title: "Catch issues privately",
+    body: "Give guests a private way to explain a problem, while keeping their choice to share an honest public review.",
   },
   {
-    span: 'small',
+    span: "small",
     stat: null,
-    title: 'See what guests think',
-    body: 'Explore the guest feedback experience, then discuss reporting options with our team.',
+    title: "See what guests think",
+    body: "Explore the guest feedback experience, then discuss reporting options with our team.",
   },
   {
-    span: 'small',
-    stat: 'No app',
-    title: 'A familiar way to connect',
-    body: 'Tap an NFC-enabled phone or scan the QR code to open the feedback page.',
+    span: "small",
+    stat: "No app",
+    title: "A familiar way to connect",
+    body: "Tap an NFC-enabled phone or scan the QR code to open the feedback page.",
   },
   {
-    span: 'wide',
+    span: "wide",
     stat: null,
-    title: 'Built for every counter',
-    body: 'Restaurants, cafés, salons, hotels, gyms, clinics, retail — anywhere a guest leaves with an opinion.',
+    title: "Built for every counter",
+    body: "Restaurants, cafés, salons, hotels, gyms, clinics, retail — anywhere a guest leaves with an opinion.",
   },
-]
+];
 
 export default function WhyRevora() {
   return (
@@ -52,6 +53,11 @@ export default function WhyRevora() {
               className={`wrv__cell glass wrv__cell--${c.span}`}
               delay={i * 60}
             >
+              {c.span === "tall" && (
+                <span className="wrv__icon">
+                  <ArrowIcon />
+                </span>
+              )}
               {c.stat && <span className="mono wrv__stat">{c.stat}</span>}
               <h3 className="wrv__cellTitle">{c.title}</h3>
               <p className="wrv__cellBody">{c.body}</p>
@@ -60,5 +66,5 @@ export default function WhyRevora() {
         </div>
       </div>
     </section>
-  )
+  );
 }

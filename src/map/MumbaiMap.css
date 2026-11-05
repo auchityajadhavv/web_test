@@ -19,10 +19,18 @@
   overflow: hidden;
   background: #0b0b12;
   /* placeholder grid + warm glow, visible until map tiles paint over it */
-  background-image: radial-gradient(60% 60% at 50% 45%, rgba(124, 58, 237, 0.1), transparent 70%),
+  background-image:
+    radial-gradient(
+      60% 60% at 50% 45%,
+      rgba(124, 58, 237, 0.1),
+      transparent 70%
+    ),
     linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-  background-size: auto, 44px 44px, 44px 44px;
+  background-size:
+    auto,
+    44px 44px,
+    44px 44px;
 }
 .mm__canvas {
   position: absolute;
@@ -31,7 +39,7 @@
 
 /* keep the box edges deep so the map reads as inset */
 .mm__inner::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -87,7 +95,7 @@
   position: relative;
 }
 .mm-pin--pulse::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: -4px;
   border-radius: 999px;
@@ -166,7 +174,10 @@
 }
 .mm-store.is-live .mm-store__card {
   border-color: rgba(139, 92, 246, 0.6);
-  box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.4), 0 14px 34px -14px #000, var(--glow-purple);
+  box-shadow:
+    0 0 0 1px rgba(139, 92, 246, 0.4),
+    0 14px 34px -14px #000,
+    var(--glow-purple);
 }
 .mm-store__logo {
   width: 26px;
@@ -213,13 +224,15 @@
   transform: rotate(45deg);
   background: var(--lilac2);
   border: 1.5px solid #fff;
-  box-shadow: 0 4px 10px -2px #000, 0 0 12px rgba(139, 92, 246, 0.8);
+  box-shadow:
+    0 4px 10px -2px #000,
+    0 0 12px rgba(139, 92, 246, 0.8);
 }
 .mm-store__pin--pulse {
   position: relative;
 }
 .mm-store__pin--pulse::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: -3px;
   border-radius: inherit;
@@ -227,4 +240,18 @@
   animation: mm-pulse 2s ease-out infinite;
 }
 
-.mm__fallback { position: absolute; inset: 0; display: grid; place-content: center; padding: 32px; background: var(--card); color: var(--text2); text-align: center; z-index: 2; }
+.mm__fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  padding: 32px;
+  background: var(--card);
+  color: var(--text2);
+  text-align: center;
+  z-index: 2;
+}
+
+.deferred-map {
+  scroll-margin-top: 84px;
+}

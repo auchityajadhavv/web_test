@@ -1,58 +1,80 @@
-import { Suspense, lazy } from 'react'
-import TryDemo from './TryDemo'
-import { openDemo } from '../lib/openDemo'
-import './Hero.css'
-import AmbientFallback from './AmbientFallback'
-import { useReducedMotion } from '../hooks/useReducedMotion'
-
-// defer the 3D field (three.js) so hero text paints immediately
-const AmbientField = lazy(() => import('../three/AmbientField'))
-
-const STATS = [
-  { big: 'NFC + QR', label: 'two ways to connect' },
-  { big: 'No app', label: 'for your guests' },
-  { big: '1 tap', label: 'for guests' },
-]
+import ArrowIcon from "./ArrowIcon";
+import TryDemo from "./TryDemo";
+import { openDemo } from "../lib/openDemo";
+import AmbientFallback from "./AmbientFallback";
+import "./Hero.css";
 
 export default function Hero() {
-  const reduced = useReducedMotion()
-  const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection
-  const light = reduced || window.innerWidth < 720 || (navigator.hardwareConcurrency || 8) <= 4 || connection?.saveData || ['slow-2g', '2g'].includes(connection?.effectiveType || '')
   return (
     <section className="hero" id="top">
-      <Suspense fallback={<AmbientFallback />}>
-        {light ? <AmbientFallback /> : <AmbientField />}
-      </Suspense>
-      <div className="hero__scrim" aria-hidden="true" />
-
+      <AmbientFallback />
       <div className="container hero__inner">
-        <span className="eyebrow">Feedback that becomes reputation</span>
-        <h1 className="hero__h1">
-          Experiences that <span className="text-purple">matter.</span>
-        </h1>
-        <p className="lead hero__sub">
-          An NFC + QR stand for your counter. Guests tap to share feedback
-          and can choose to write a Google review.
-        </p>
-        <div className="hero__actions">
-          <button className="btn btn-primary" onClick={() => openDemo()}>Book a demo</button>
-          <TryDemo label="Try it yourself" variant="ghost" />
-          <a href="#flow" className="hero__link">See how it works →</a>
+        <div className="hero__copy">
+          <span className="hero__pill">
+            <span aria-hidden="true" />
+            Small stand. Meaningful connections.
+          </span>
+          <h1 className="hero__h1">
+            Experiences that <span className="text-purple">matter.</span>
+          </h1>
+          <p className="hero__sub">
+            Give every guest a simple way to be heard. A beautifully made NFC +
+            QR stand for honest feedback and optional Google reviews.
+          </p>
+          <div className="hero__actions">
+            <button className="btn btn-primary" onClick={() => openDemo()}>
+              Book a demo <ArrowIcon />
+            </button>
+            <TryDemo label="Try it yourself" variant="ghost" />
+          </div>
+          <p className="hero__note">No app to download. No guest sign-up.</p>
+          <a href="#products" className="hero__link">
+            Meet the stand <ArrowIcon down />
+          </a>
         </div>
-        <dl className="hero__stats">
-          {STATS.map((s) => (
-            <div key={s.label} className="hero__stat">
-              <dt className="mono hero__statBig">{s.big}</dt>
-              <dd className="mono hero__statLabel">{s.label}</dd>
+        <figure className="hero__product">
+          <div className="hero__productHead">
+            <span className="mono">THE REVORA STAND</span>
+            <span className="hero__edition">Black &amp; gold</span>
+          </div>
+          <div className="hero__productImage">
+            <img
+              src="/assets/poster.jpg"
+              alt="The REVORA black acrylic NFC and QR card seated in its brushed-gold stand"
+              width="743"
+              height="743"
+              decoding="async"
+            />
+          </div>
+          <figcaption>
+            <div>
+              <span className="hero__productTitle">
+                A little presence.
+                <br />A lasting impression.
+              </span>
+              <span className="hero__productDetail">
+                Made for the moments after a good visit.
+              </span>
             </div>
-          ))}
-        </dl>
+            <span className="hero__nfc" aria-label="Tap or scan">
+              NFC<span>+</span>QR
+            </span>
+          </figcaption>
+        </figure>
       </div>
-
-      <a href="#flow" className="hero__cue" aria-label="Scroll to see how it works">
-        <span className="mono">Scroll</span>
-        <span className="hero__cueLine" />
-      </a>
+      <div className="container hero__fit">
+        <p>
+          A place on your counter.
+          <br />
+          <strong>A voice for your guests.</strong>
+        </p>
+        <ul aria-label="Designed for these venues">
+          <li>Restaurants</li>
+          <li>Cafés</li>
+          <li>Hotels</li>
+          <li>Salons &amp; retail</li>
+        </ul>
+      </div>
     </section>
-  )
+  );
 }

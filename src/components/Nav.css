@@ -2,7 +2,10 @@
   position: fixed;
   inset: 0 0 auto 0;
   z-index: 100;
-  transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    backdrop-filter 0.3s ease;
   border-bottom: 1px solid transparent;
 }
 
@@ -33,7 +36,9 @@
   border-radius: 999px;
   font-size: 0.92rem;
   color: var(--text2);
-  transition: color 0.2s ease, background 0.2s ease;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
 }
 
 .nav__link:hover {
@@ -45,7 +50,7 @@
   color: var(--text);
 }
 .nav__link.is-active::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 14px;
   right: 14px;
@@ -86,7 +91,9 @@
   height: 1.6px;
   background: var(--text);
   border-radius: 2px;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
 }
 .nav__burger span:nth-child(1) {
   top: 18px;
@@ -133,7 +140,9 @@
   border-bottom: 1px solid var(--border-soft);
   transform: translateY(8px);
   opacity: 0;
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
 }
 .nav__sheet.is-open .nav__sheetLink {
   opacity: 1;
@@ -178,6 +187,36 @@
   }
 }
 
-dialog.nav__sheet { border: 0; margin: 0; width: 100%; height: calc(100% - 72px); max-width: none; max-height: none; color: var(--text); }
-dialog.nav__sheet:not([open]) { display: none; }
-dialog.nav__sheet::backdrop { background: rgba(6, 6, 11, .4); }
+dialog.nav__sheet {
+  border: 0;
+  margin: 0;
+  width: 100%;
+  height: calc(100% - 72px);
+  max-width: none;
+  max-height: none;
+  color: var(--text);
+}
+dialog.nav__sheet:not([open]) {
+  display: none;
+}
+dialog.nav__sheet::backdrop {
+  background: rgba(6, 6, 11, 0.4);
+}
+
+.nav {
+  background: #08080de8;
+  border-bottom-color: #ffffff09;
+  backdrop-filter: blur(16px);
+}
+.nav__link {
+  font-size: 0.78rem;
+  padding: 10px 12px;
+}
+.nav__cta {
+  font-size: 0.78rem;
+  min-height: 42px;
+}
+.nav__sheetInner {
+  max-width: 540px;
+  margin-inline: auto;
+}

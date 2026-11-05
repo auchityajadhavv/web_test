@@ -1,6 +1,6 @@
-import Reveal from './Reveal'
-import { openDemo } from '../lib/openDemo'
-import './Cta.css'
+import Reveal from "./Reveal";
+import { openDemo } from "../lib/openDemo";
+import "./Cta.css";
 
 export default function Cta() {
   return (
@@ -9,20 +9,24 @@ export default function Cta() {
         <Reveal className="cta__panel">
           <div className="cta__glow" aria-hidden="true" />
           <span className="eyebrow">Get started</span>
-          <h2 className="cta__h2">Ready to grow your reputation?</h2>
+          <h2 className="cta__h2">Good conversations start with a tap.</h2>
           <p className="lead cta__lead">
-            Place your first Revora stand this week and watch the reviews follow.
+            Tell us a little about your venue. We’ll help you explore the stand,
+            the guest experience, and the right setup for you.
           </p>
           <div className="cta__actions">
-            <button className="btn btn-primary cta__primary" onClick={() => openDemo()}>
+            <button
+              className="btn btn-primary cta__primary"
+              onClick={() => openDemo()}
+            >
               Book a demo
             </button>
             <a href="#pricing" className="btn btn-ghost">
-              See pricing
+              Explore plans
             </a>
           </div>
         </Reveal>
       </div>
     </section>
-  )
+  );
 }

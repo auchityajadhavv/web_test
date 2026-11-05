@@ -11,8 +11,12 @@
   animation: dm-fade 0.25s ease;
 }
 @keyframes dm-fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .dm__card {
@@ -23,15 +27,27 @@
   border-radius: var(--radius-lg);
   border: 1px solid rgba(139, 92, 246, 0.28);
   background:
-    radial-gradient(120% 80% at 20% -10%, rgba(124, 58, 237, 0.16), transparent 55%),
+    radial-gradient(
+      120% 80% at 20% -10%,
+      rgba(124, 58, 237, 0.16),
+      transparent 55%
+    ),
     var(--card);
-  box-shadow: 0 50px 100px -40px #000, 0 0 0 1px #ffffff08 inset;
+  box-shadow:
+    0 50px 100px -40px #000,
+    0 0 0 1px #ffffff08 inset;
   padding: clamp(28px, 4vw, 40px);
   animation: dm-rise 0.3s var(--ease-signature);
 }
 @keyframes dm-rise {
-  from { opacity: 0; transform: translateY(18px) scale(0.98); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .dm__close {
@@ -46,7 +62,9 @@
   border: 1px solid var(--border);
   background: var(--glass);
   color: var(--text2);
-  transition: background var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+  transition:
+    background var(--dur-micro) var(--ease-out),
+    color var(--dur-micro) var(--ease-out);
 }
 .dm__close:hover {
   background: #ffffff16;
@@ -108,7 +126,9 @@
   padding: 12px 14px;
   outline: none;
   resize: none;
-  transition: border-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+  transition:
+    border-color var(--dur-micro) var(--ease-out),
+    box-shadow var(--dur-micro) var(--ease-out);
 }
 .dm__field input::placeholder,
 .dm__field textarea::placeholder {
@@ -186,7 +206,59 @@
 }
 
 /* Native dialog stays closed until showModal makes the background inert. */
-dialog.dm__overlay { border: 0; margin: 0; width: 100%; height: 100%; max-width: none; max-height: none; color: var(--text); }
-dialog.dm__overlay:not([open]) { display: none; }
-dialog.dm__overlay::backdrop { background: transparent; }
-.dm__honeypot { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+dialog.dm__overlay {
+  border: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  color: var(--text);
+}
+dialog.dm__overlay:not([open]) {
+  display: none;
+}
+dialog.dm__overlay::backdrop {
+  background: transparent;
+}
+.dm__honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.dm__close {
+  width: 44px;
+  height: 44px;
+  top: 10px;
+  right: 10px;
+}
+.dm__card {
+  border-radius: 24px;
+  border-color: #c4a6ff35;
+}
+.dm__title {
+  font-weight: 500;
+  line-height: 1.2;
+  padding-right: 10px;
+}
+.dm__sub {
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+.dm__field input,
+.dm__field textarea {
+  font-size: 0.9rem;
+}
+.dm__fine {
+  line-height: 1.8;
+  letter-spacing: 0;
+}
+a.dm__fine {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  color: var(--lilac2);
+  padding-block: 7px;
+}

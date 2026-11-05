@@ -1,41 +1,46 @@
-import Reveal from './Reveal'
-import { openDemo } from '../lib/openDemo'
-import './Pricing.css'
+import Reveal from "./Reveal";
+import { openDemo } from "../lib/openDemo";
+import "./Pricing.css";
 
 const PLANS = [
   {
-    name: 'Starter',
-    price: '499',
-    note: 'For a single counter finding its feet.',
-    features: ['1 Revora stand', 'NFC + QR feedback', 'Suggested Google reviews', 'Basic dashboard'],
+    name: "Starter",
+    price: "499",
+    note: "For a single counter finding its feet.",
+    features: [
+      "1 Revora stand",
+      "NFC + QR feedback",
+      "Suggested Google reviews",
+      "Basic dashboard",
+    ],
     featured: false,
   },
   {
-    name: 'Growth',
-    price: '999',
-    note: 'For venues serious about their rating.',
+    name: "Growth",
+    price: "999",
+    note: "For venues serious about their rating.",
     features: [
-      'Up to 3 stands',
-      'Everything in Starter',
-      'Private issue routing',
-      'Custom card branding',
-      'Full review analytics',
+      "Up to 3 stands",
+      "Everything in Starter",
+      "Private issue routing",
+      "Custom card branding",
+      "Full review analytics",
     ],
     featured: true,
   },
   {
-    name: 'Managed',
-    price: '2,499',
-    note: 'We run the loop; you read the results.',
+    name: "Managed",
+    price: "2,499",
+    note: "We run the loop; you read the results.",
     features: [
-      'Unlimited stands',
-      'Everything in Growth',
-      'Dedicated success manager',
-      'Monthly reputation report',
+      "Unlimited stands",
+      "Everything in Growth",
+      "Dedicated success manager",
+      "Monthly reputation report",
     ],
     featured: false,
   },
-]
+];
 
 export default function Pricing() {
   return (
@@ -43,8 +48,15 @@ export default function Pricing() {
       <div className="container">
         <Reveal className="pricing__head">
           <span className="eyebrow">Pricing</span>
-          <h2 className="h2">Simple plans for real businesses.</h2>
-          <p className="lead">Ask our team to confirm hardware, installation, taxes, and feature availability before choosing a plan.</p>
+          <h2 className="h2">
+            The right fit.
+            <br />
+            <span className="text-purple">Room to grow.</span>
+          </h2>
+          <p className="lead">
+            Ask our team to confirm hardware, installation, taxes, and feature
+            availability before choosing a plan.
+          </p>
         </Reveal>
 
         <div className="pricing__grid">
@@ -52,10 +64,12 @@ export default function Pricing() {
             <Reveal
               as="article"
               key={p.name}
-              className={`pricing__card glass ${p.featured ? 'is-featured' : ''}`}
+              className={`pricing__card glass ${p.featured ? "is-featured" : ""}`}
               delay={i * 70}
             >
-              {p.featured && <span className="mono pricing__badge">Most popular</span>}
+              {p.featured && (
+                <span className="mono pricing__badge">For growing venues</span>
+              )}
               <h3 className="pricing__name">{p.name}</h3>
               <p className="pricing__note">{p.note}</p>
               <div className="pricing__price">
@@ -73,23 +87,40 @@ export default function Pricing() {
                 ))}
               </ul>
               <button
-                className={`btn ${p.featured ? 'btn-primary' : 'btn-ghost'} pricing__cta`}
+                className={`btn ${p.featured ? "btn-primary" : "btn-ghost"} pricing__cta`}
                 onClick={() => openDemo(p.name)}
               >
-                {p.featured ? 'Start with Growth' : `Choose ${p.name}`}
+                {`Discuss ${p.name}`}
               </button>
             </Reveal>
           ))}
         </div>
+        <p className="pricing__fine">
+          Prices shown per month. Confirm hardware, delivery, taxes, and
+          available features during your demo.
+        </p>
       </div>
     </section>
-  )
+  );
 }
 
 function Check() {
   return (
-    <svg className="pricing__check" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M3 8.5 6.2 11.5 13 4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <svg
+      className="pricing__check"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M3 8.5 6.2 11.5 13 4.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
-  )
+  );
 }

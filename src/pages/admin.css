@@ -3,8 +3,16 @@
 .admin {
   min-height: 100svh;
   background:
-    radial-gradient(90% 60% at 80% -10%, rgba(124, 58, 237, 0.16), transparent 55%),
-    radial-gradient(70% 50% at 0% 100%, rgba(124, 58, 237, 0.1), transparent 55%),
+    radial-gradient(
+      90% 60% at 80% -10%,
+      rgba(124, 58, 237, 0.16),
+      transparent 55%
+    ),
+    radial-gradient(
+      70% 50% at 0% 100%,
+      rgba(124, 58, 237, 0.1),
+      transparent 55%
+    ),
     var(--bg);
   color: var(--text);
 }
@@ -20,7 +28,9 @@
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   background: var(--card);
-  box-shadow: 0 50px 100px -40px #000, 0 0 0 1px #ffffff08 inset;
+  box-shadow:
+    0 50px 100px -40px #000,
+    0 0 0 1px #ffffff08 inset;
   padding: clamp(28px, 5vw, 40px);
 }
 .auth__brand {
@@ -35,10 +45,14 @@
   border-radius: 50%;
   border: 1px solid rgba(196, 166, 255, 0.5);
   position: relative;
-  background: radial-gradient(circle at 35% 30%, rgba(196, 166, 255, 0.5), transparent 60%);
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(196, 166, 255, 0.5),
+    transparent 60%
+  );
 }
 .auth__mark::after {
-  content: '';
+  content: "";
   position: absolute;
   top: -2px;
   left: 50%;
@@ -100,7 +114,9 @@
   border-radius: 12px;
   padding: 12px 14px;
   outline: none;
-  transition: border-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+  transition:
+    border-color var(--dur-micro) var(--ease-out),
+    box-shadow var(--dur-micro) var(--ease-out);
 }
 .auth__field input:focus {
   border-color: rgba(139, 92, 246, 0.7);
@@ -200,7 +216,11 @@
 }
 .dash__stat.is-accent {
   border-color: rgba(139, 92, 246, 0.5);
-  background: linear-gradient(150deg, rgba(124, 58, 237, 0.16), rgba(255, 255, 255, 0.02));
+  background: linear-gradient(
+    150deg,
+    rgba(124, 58, 237, 0.16),
+    rgba(255, 255, 255, 0.02)
+  );
 }
 .dash__statValue {
   font-family: var(--font-display);
@@ -235,7 +255,9 @@
   color: var(--text2);
   padding: 7px 14px;
   border-radius: 999px;
-  transition: background var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+  transition:
+    background var(--dur-micro) var(--ease-out),
+    color var(--dur-micro) var(--ease-out);
 }
 .dash__filter.is-active {
   background: var(--btn);
@@ -314,5 +336,261 @@
 @media (max-width: 640px) {
   .dash__stats {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Owner console: quiet hierarchy, readable requests, and usable mobile cards. */
+.admin__inner {
+  max-width: 1360px;
+  padding-top: 24px;
+}
+.dash__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 42px;
+}
+.dash__topbar .auth__brand {
+  margin: 0;
+}
+.dash__siteLink {
+  font-size: 0.78rem;
+  color: var(--text2);
+  padding: 10px 0;
+}
+.dash__intro {
+  color: var(--text2);
+  font-size: 0.85rem;
+  margin-top: 10px;
+}
+.dash__title {
+  font-weight: 500;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+}
+.dash__statValue {
+  font-weight: 500;
+}
+.dash__stat {
+  padding: 26px;
+  border-radius: 18px;
+  background: #ffffff03;
+}
+.dash__statLabel {
+  letter-spacing: 0.08em;
+  font-size: 0.62rem;
+}
+.dash__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-block: 26px 18px;
+}
+.dash__filter {
+  min-height: 40px;
+  font-family: var(--font-body);
+  text-transform: capitalize;
+  font-size: 0.78rem;
+  letter-spacing: 0;
+}
+.dash__refresh {
+  font-size: 0.76rem;
+  min-height: 40px;
+}
+.dash__pagination {
+  justify-content: flex-end;
+  font-size: 0.75rem;
+  color: var(--text2);
+}
+.dash__pagination .btn {
+  min-height: 40px;
+  font-size: 0.76rem;
+}
+.dash__empty {
+  border: 1px dashed var(--border);
+  border-radius: 20px;
+  text-align: center;
+  padding: 60px 25px;
+  color: var(--text2);
+}
+.dash__emptyIcon {
+  display: grid;
+  place-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid #c4a6ff35;
+  background: #a78bfa0a;
+  border-radius: 14px;
+  color: var(--lilac2);
+  font-size: 1.4rem;
+  margin: 0 auto 20px;
+}
+.dash__empty h2 {
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  margin-bottom: 12px;
+}
+.dash__empty p {
+  font-size: 0.82rem;
+  max-width: 46ch;
+  margin-inline: auto;
+}
+.dash__empty .btn {
+  margin-top: 24px;
+  font-size: 0.78rem;
+}
+.dash__table {
+  min-width: 960px;
+}
+.dash__table th {
+  font-size: 0.59rem;
+  letter-spacing: 0.07em;
+  font-weight: 500;
+}
+.dash__table td {
+  font-size: 0.78rem;
+  line-height: 1.7;
+  padding-block: 20px;
+}
+.dash__table tbody tr:hover {
+  background: #ffffff02;
+}
+.dash__table td a {
+  overflow-wrap: anywhere;
+}
+.dash__status {
+  min-height: 36px;
+  font-size: 0.64rem;
+}
+.dash__status option {
+  background: #15121c;
+  color: #fff;
+}
+.dash__who {
+  overflow-wrap: anywhere;
+  font-size: 0.68rem;
+}
+.auth__title {
+  font-weight: 500;
+  line-height: 1.25;
+}
+.auth__card {
+  border-color: #c4a6ff25;
+}
+.auth__field input {
+  min-height: 46px;
+}
+.auth__card > a:last-child {
+  display: inline-block;
+  margin-top: 20px;
+  color: var(--text2);
+  font-size: 0.8rem;
+}
+.auth__card > [role="status"] {
+  font-size: 0.82rem;
+  color: var(--lilac2);
+  margin-bottom: 16px;
+}
+.auth__card img[alt="Authenticator setup QR code"] {
+  max-width: 100%;
+  margin: 20px auto;
+  border-radius: 8px;
+  background: white;
+  padding: 8px;
+}
+@media (max-width: 700px) {
+  .dash__head {
+    gap: 22px;
+  }
+  .dash__headActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .dash__stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .dash__stat {
+    padding: 17px 12px;
+    border-radius: 14px;
+  }
+  .dash__statValue {
+    font-size: 1.65rem;
+  }
+  .dash__statLabel {
+    font-size: 0.52rem;
+    line-height: 1.6;
+    letter-spacing: 0;
+  }
+  .dash__topbar {
+    margin-bottom: 28px;
+  }
+  .dash__filters {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .dash__filter {
+    padding-inline: 13px;
+  }
+  .dash__refresh {
+    width: 100%;
+  }
+  .dash__tableWrap {
+    overflow: visible;
+    border: 0;
+  }
+  .dash__table,
+  .dash__table tbody {
+    display: block;
+    min-width: 0;
+  }
+  .dash__table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .dash__table tbody tr {
+    display: block;
+    margin-bottom: 14px;
+    padding: 12px 18px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: #ffffff03;
+  }
+  .dash__table td {
+    display: grid;
+    grid-template-columns: 105px minmax(0, 1fr);
+    gap: 12px;
+    padding: 9px 0;
+    font-size: 0.78rem;
+  }
+  .dash__table td::before {
+    content: attr(data-th);
+    color: var(--text3);
+    font-size: 0.67rem;
+  }
+  .dash__msg {
+    max-width: none;
+    overflow-wrap: anywhere;
+  }
+  .dash__status {
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 700px) {
+  .dash__statLabel {
+    font-size: 0.62rem;
+    line-height: 1.5;
   }
 }
