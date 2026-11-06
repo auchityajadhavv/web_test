@@ -1,4 +1,4 @@
-import Starfield from "./components/Starfield";
+import StandCustomizer from "./components/StandCustomizer";
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import TapToReview from "./components/TapToReview";
@@ -19,10 +19,11 @@ export default function MarketingSite() {
       <a href="#main-content" className="skip-link">
         Skip to content
       </a>
-      <Starfield />
+
       <Nav />
       <main id="main-content" tabIndex={-1}>
         <Hero />
+        <StandCustomizer />
         <Products />
         <TapToReview />
         <WhyReviews />

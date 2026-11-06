@@ -11,7 +11,7 @@ const STEPS = [
   {
     n: "01",
     t: "Tap the card",
-    b: "A guest taps their phone — or scans the QR. No app, no sign-up.",
+    b: "A customer taps their phone — or scans the QR. No app, no sign-up.",
   },
   {
     n: "02",
@@ -21,12 +21,12 @@ const STEPS = [
   {
     n: "03",
     t: "Review a draft",
-    b: "Explore an example draft based on the feedback. Guests can edit it in their own words.",
+    b: "Explore an example draft based on the feedback. Customers can edit it in their own words.",
   },
   {
     n: "04",
     t: "Choose to share",
-    b: "Guests choose whether to share their honest review on Google.",
+    b: "Customers choose whether to share their honest review on Google.",
   },
 ];
 

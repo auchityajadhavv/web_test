@@ -241,7 +241,7 @@ test("mobile and reduced-motion visitors avoid the 3D bundle and map is deferred
         url.includes("AmbientField.tsx") || url.includes("MumbaiMap.tsx"),
     ),
   ).toBe(false);
-  await expect(page.locator('canvas[data-orbit="hero"]')).toBeVisible();
+  await expect(page.locator('.hero__product img')).toBeVisible();
 });
 
 test("approved admin must complete authenticator verification before dashboard access", async ({
@@ -471,16 +471,16 @@ test("the sample map anchor works before its code has loaded", async ({
   ).toBeVisible();
 });
 
-test("orbit hero and pricing stay inside mobile and tablet viewports", async ({
+test("product hero and pricing stay inside mobile and tablet viewports", async ({
   page,
 }) => {
   for (const width of [360, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
-    await expect(page.locator('canvas[data-orbit="hero"]')).toBeVisible();
-    await expect(page.locator(".hero img")).toHaveCount(0);
+    await expect(page.locator('.hero__product img')).toBeVisible();
+    await expect(page.locator(".hero img")).toHaveCount(1);
     for (const selector of [
-      ".hero__orbit",
+      ".hero__product",
       ".hero__actions",
       ".prod__visual",
       ".pricing__grid",
@@ -510,59 +510,7 @@ test("public pages have no owner link while direct login still works", async ({
   ).toBeVisible();
 });
 
-test("orbit animates with depth and pauses once the hero is offscreen", async ({
-  page,
-}) => {
-  await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.goto("/");
-  const orbit = page.locator('canvas[data-orbit="hero"]');
-  await expect(orbit).toHaveAttribute("data-motion", "playing");
-  await expect(page.locator('.nav canvas[data-orbit="mark"]')).toHaveAttribute(
-    "data-motion",
-    "playing",
-  );
-  const first = await orbit.evaluate((canvas) =>
-    (canvas as HTMLCanvasElement).toDataURL(),
-  );
-  await expect
-    .poll(() =>
-      orbit.evaluate((canvas) => (canvas as HTMLCanvasElement).toDataURL()),
-    )
-    .not.toBe(first);
-  await page.locator("#faq").scrollIntoViewIfNeeded();
-  await expect(orbit).toHaveAttribute("data-motion", "paused");
-  const paused = await orbit.evaluate((canvas) =>
-    (canvas as HTMLCanvasElement).toDataURL(),
-  );
-  await page.evaluate(
-    () =>
-      new Promise((resolve) =>
-        requestAnimationFrame(() => requestAnimationFrame(resolve)),
-      ),
-  );
-  expect(
-    await orbit.evaluate((canvas) => (canvas as HTMLCanvasElement).toDataURL()),
-  ).toBe(paused);
-});
-
-test("reduced-motion orbit stays still when the pointer moves", async ({
-  page,
-}) => {
-  await page.goto("/");
-  const orbit = page.locator('canvas[data-orbit="hero"]');
-  await expect(orbit).toHaveAttribute("data-motion", "reduced");
-  const first = await orbit.evaluate((canvas) =>
-    (canvas as HTMLCanvasElement).toDataURL(),
-  );
-  await page.mouse.move(100, 200);
-  await page.mouse.move(700, 350);
-  await page.evaluate(
-    () =>
-      new Promise((resolve) =>
-        requestAnimationFrame(() => requestAnimationFrame(resolve)),
-      ),
-  );
-  expect(
-    await orbit.evaluate((canvas) => (canvas as HTMLCanvasElement).toDataURL()),
-  ).toBe(first);
+test("reduced motion disables atmospheric animation", async ({page}) => {
+ await page.goto('/');
+ expect(await page.locator('.hero__light').evaluate(el => getComputedStyle(el).animationName)).toBe('none');
 });

@@ -6,18 +6,18 @@ import "./Products.css";
 const PRODUCTS = [
   {
     name: "The card",
-    body: "A detachable black acrylic card. Guests tap with an NFC-enabled phone or scan the printed QR code.",
+    body: "A detachable black acrylic card. Customers tap with an NFC-enabled phone or scan the printed QR code.",
     detail: "Two ways in. One simple experience.",
   },
   {
     name: "The stand",
-    body: "A weighted, brushed-gold base that gives your feedback card a considered place on the counter.",
-    detail: "Black acrylic. Brushed gold. Made to belong.",
+    body: "A weighted, brushed-graphite base that gives your feedback card a considered place on the counter.",
+    detail: "Black acrylic. Brushed graphite. Made to belong.",
   },
   {
     name: "Your finishing touch",
-    body: "Discuss your logo, venue name, and card design with our team. A small detail that feels like your brand.",
-    detail: "Your venue, down to the details.",
+    body: "Discuss your logo, business name, and card design with our team. A small detail that feels like your brand.",
+    detail: "Your business, down to the details.",
   },
 ];
 export default function Products() {
@@ -26,7 +26,7 @@ export default function Products() {
       <div className="container">
         <Reveal className="prod__head">
           <div>
-            <span className="eyebrow">Meet your new front-of-house detail</span>
+            <span className="eyebrow">Meet your new countertop detail</span>
             <h2 className="h2">
               Designed to belong.
               <br />
@@ -34,22 +34,22 @@ export default function Products() {
             </h2>
           </div>
           <p className="lead">
-            The smallest things shape a guest’s experience. Make asking for
+            The smallest things shape a customer’s experience. Make asking for
             feedback one of the thoughtful ones.
           </p>
         </Reveal>
         <div className="prod__layout">
           <Reveal as="figure" className="prod__visual">
             <img
-              src="/assets/revora-lifestyle.webp"
-              alt="A black-and-gold REVORA stand on a warmly lit restaurant counter"
+              src="/assets/revora-selected.webp"
+              alt="A graphite REVORA stand with translucent acrylic edges"
               loading="lazy"
               decoding="async"
-              width="1448"
-              height="1086"
+              width="1254"
+              height="1254"
             />
             <figcaption>
-              <span>Good design has a place at the table.</span>
+              <span>Made for your counter.</span>
               <span className="mono">REVORA / NFC + QR</span>
             </figcaption>
           </Reveal>
@@ -70,7 +70,7 @@ export default function Products() {
               </Reveal>
             ))}
             <button className="prod__contact" onClick={() => openDemo()}>
-              Find the right setup for your venue <ArrowIcon />
+              Find the right setup for your business <ArrowIcon />
             </button>
           </div>
         </div>

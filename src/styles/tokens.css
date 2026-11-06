@@ -1,17 +1,12 @@
-/* ============================================================
-   REVORA design tokens
-   Two-colour rule (sacred):
-     UI  = PURPLE + BLACK
-     PRODUCT (card + holder) = BLACK + GOLD, never purple
-   ============================================================ */
+/* Neutral graphite and silver identity. */
 :root {
   /* ---- UI (purple + black) ---- */
-  --bg: #08080d;
+  --bg: #101112;
   --bg-grad: radial-gradient(
     105% 90% at 60% 30%,
-    #15151f 0%,
-    #0d0d15 50%,
-    #08080d 100%
+    #232527 0%,
+    #18191b 50%,
+    #101112 100%
   );
   --card: #0e0e10;
   --glass: linear-gradient(150deg, #ffffff0e, #ffffff03);
@@ -19,17 +14,17 @@
   --border: #ffffff18;
   --border-soft: #ffffff10;
 
-  --purple: #7c3aed;
-  --purple2: #8b5cf6;
-  --lilac: #9a7fd6;
-  --lilac2: #c4a6ff;
+  --purple: #b7bdc5;
+  --purple2: #c8cdd3;
+  --lilac: #aeb4bd;
+  --lilac2: #edf0f4;
 
   --text: #ffffff;
-  --text2: #b3afbf;
-  --text3: #928c9f;
+  --text2: #b9bdc2;
+  --text3: #a1a6ac;
 
   /* pale-lavender pill button, dark text */
-  --btn: linear-gradient(92deg, #e7e0f5, #c3b6e6);
+  --btn: linear-gradient(92deg, #eceff2, #aeb4bc);
   --btn-text: #0c0a14;
 
   /* ---- PRODUCT ONLY (black + gold) ---- */

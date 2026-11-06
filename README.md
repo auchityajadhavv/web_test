@@ -30,10 +30,14 @@ Admin access is enforced by PostgreSQL row-level security for direct API calls a
 ## Performance and content
 
 - The map module loads near the viewport; example venues and ratings are clearly labeled.
-- The hero uses a lightweight canvas orbit with projected 3D geometry and depth shading, shared with the small logo mark. It needs no image or WebGL bundle and pauses offscreen, in hidden tabs, and for reduced motion.
+- The hero uses the selected graphite stand image with a scroll-linked wordmark and lightweight atmospheric lighting. It does not load a WebGL bundle; reduced motion disables the light animation.
 - The optimized, silent 960px tap video is about 217 KB and pauses offscreen. Reduced-motion/data-saving visitors see its poster.
 - Fonts are self-hosted. Decorative animations pause when hidden and clean up listeners/frames.
 - Native dialogs provide background isolation, keyboard navigation and focus restoration. Pricing opens a plan-specific request, all section anchors remain available before lazy loading, and the owner console uses mobile request cards. Owner sign-in is unlinked from public navigation; use /login directly. Password, MFA and database policies remain required; an unlisted URL is not an access-control boundary.
 - The interactive guest demo generates an example draft locally. It does not submit feedback or post Google reviews.
 
 Assets live in `public/assets/`, components in `src/components/`, owner pages in `src/pages/`, SQL in `supabase/schema.sql`, and the email function in `supabase/functions/request-demo/`. The purple/black UI and black/gold product identity remain intact.
+
+### Graphite homepage and stand preview
+
+The homepage uses a scroll-linked wordmark that docks into the navigation, with native scrolling and a reduced-motion fallback. The selected translucent-edge stand is served as an optimized WebP. `/` includes a `#customize` section with a business name, card/base colours, local-device persistence, reset and a keyboard-accessible presentation view. Its sample QR opens `https://revora-live.vercel.app`; previews are concepts, not manufacturing proofs. No customizer information is sent to the server.
