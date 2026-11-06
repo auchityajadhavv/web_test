@@ -10,3 +10,9 @@
 .hero__product img{height:auto}
 @media(min-width:700px){.hero__product{margin:-25px 0 -30px 0}.hero__copy p{max-width:36ch}}
 .hero__light{animation-play-state:var(--light-play,running)}
+
+/* Reference-matched studio plate: no full-screen blur or blend animation. */
+.hero{background:#191b1e;isolation:isolate}
+.hero__light{inset:0;background:#191b1e url('/assets/hero-studio.webp') center bottom / cover no-repeat;filter:none;animation:none;transform:none}
+.hero__product{mix-blend-mode:lighten}
+@media(max-width:699px){.hero__light{background-image:url('/assets/hero-studio-mobile.webp');background-position:57% bottom;background-size:auto 100%}}
