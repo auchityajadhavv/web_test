@@ -1,49 +1,35 @@
 .cta__panel {
   position: relative;
-  overflow: hidden;
-  border-radius: var(--radius-lg);
-  border: 1px solid rgba(139, 92, 246, 0.3);
-  background: linear-gradient(160deg, rgba(124, 58, 237, 0.14), rgba(255, 255, 255, 0.02));
-  padding: clamp(48px, 8vw, 110px) clamp(28px, 5vw, 80px);
+  padding: clamp(40px, 6vw, 80px) 0;
   text-align: center;
+  border-top: 1px solid var(--border-soft);
 }
-
 .cta__glow {
-  position: absolute;
-  top: -40%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 70%;
-  aspect-ratio: 1;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.4), transparent 60%);
-  filter: blur(50px);
-  pointer-events: none;
+  display: none;
 }
-
 .cta__panel .eyebrow {
+  margin-bottom: 24px;
   justify-content: center;
-  margin-bottom: 22px;
-  position: relative;
 }
-
 .cta__h2 {
-  position: relative;
   font-size: var(--fs-h2);
-  margin-bottom: 18px;
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  max-width: 18ch;
+  margin: 0 auto 22px;
+  line-height: 1.15;
 }
 .cta__lead {
-  position: relative;
-  margin: 0 auto 38px;
-  max-width: 44ch;
+  font-size: 0.95rem;
+  max-width: 43ch;
+  margin: 0 auto 32px;
 }
 .cta__actions {
-  position: relative;
   display: flex;
   gap: 14px;
   justify-content: center;
   flex-wrap: wrap;
 }
 .cta__primary {
-  padding: 1.05em 2em;
-  font-size: 1.02rem;
+  min-width: 160px;
 }

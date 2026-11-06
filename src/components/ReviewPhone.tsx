@@ -202,14 +202,14 @@ export default function ReviewPhone() {
                 <div className="rp__card rp__reviewCard">
                   <div className="rp__reviewLabel">
                     <span>Suggested review</span>
-                    <span className="mono rp__ai">AI · {overall}</span>
+                    <span className="mono rp__ai">Example · {overall}</span>
                   </div>
                   <p className="rp__reviewText">
                     {typed}
                     {typed.length < 120 && <span className="rp__caret" />}
                   </p>
                 </div>
-                <div className="rp__cta">Copy &amp; post to Google</div>
+                <div className="rp__cta">Example review draft</div>
               </div>
             )}
           </div>

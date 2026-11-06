@@ -10,8 +10,3 @@ export const supabaseConfigured = Boolean(url && key)
 export const supabase: SupabaseClient | null = supabaseConfigured
   ? createClient(url as string, key as string)
   : null
-
-/** Only this email may reach the owner dashboard (also enforced by RLS). */
-export const OWNER_EMAIL = (
-  (import.meta.env.VITE_OWNER_EMAIL as string | undefined) || ''
-).toLowerCase()

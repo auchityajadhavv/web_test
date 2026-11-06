@@ -1,109 +1,45 @@
-import { useEffect, useState } from 'react'
-import Logo from './Logo'
-import { openDemo } from '../lib/openDemo'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import './Nav.css'
-
-const LINKS = [
-  { label: 'How it works', href: '#flow' },
-  { label: 'Why Revora', href: '#why' },
-  { label: 'Products', href: '#products' },
-  { label: 'Pricing', href: '#pricing' },
-  { label: 'FAQ', href: '#faq' },
-]
+import { useDialog } from '../hooks/useDialog'
 
 export default function Nav() {
-  const [scrolled, setScrolled] = useState(false)
+  const root = useRef<HTMLElement>(null)
+  const mark = useRef<HTMLAnchorElement>(null)
+  const links = useRef<HTMLElement>(null)
   const [open, setOpen] = useState(false)
-  const [active, setActive] = useState('')
-
+  const dialog = useRef<HTMLDialogElement>(null)
+  const close = useCallback(() => setOpen(false), [])
+  useDialog(dialog, open, close)
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  // highlight the nav link for whichever section is currently in view
-  useEffect(() => {
-    const sections = LINKS.map((l) => document.querySelector(l.href)).filter(
-      (el): el is Element => !!el,
-    )
-    if (!sections.length) return
-    const obs = new IntersectionObserver(
-      (entries) => {
-        // the section occupying the middle band of the viewport wins
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
-        if (visible[0]) setActive('#' + visible[0].target.id)
-      },
-      { rootMargin: '-45% 0px -45% 0px', threshold: [0, 0.5, 1] },
-    )
-    sections.forEach((s) => obs.observe(s))
-    return () => obs.disconnect()
-  }, [])
-
-  // lock body scroll while the mobile sheet is open
-  useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : ''
-    return () => {
-      document.body.style.overflow = ''
+    let frame = 0
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)')
+    const draw = () => {
+      frame = 0
+      const w = innerWidth, mobile = w < 700
+      const gutter = mobile ? 22 : Math.max(40, (w - 1280) / 2)
+      const initial = Math.min(w - gutter * 2, 1280)
+      const end = mobile ? 125 : 166
+      const p = reduced.matches ? (scrollY > 30 ? 1 : 0) : Math.min(1, Math.max(0, scrollY / (mobile ? 200 : 390)))
+      if (mark.current) {
+        mark.current.style.width = `${initial}px`
+        mark.current.style.transform = `translate3d(${gutter}px,${(mobile ? 90 : 108) * (1-p) + 25*p}px,0) scale(${1 + (end / initial - 1) * p})`
+      }
+      if (links.current) links.current.style.transform = `translateX(${mobile ? 0 : -(w / 2 - gutter - 225) * (1-p)}px)`
+      root.current?.style.setProperty('--nav-progress', String(p))
+      root.current?.classList.toggle('is-docked', p > .95)
     }
-  }, [open])
-
-  return (
-    <header className={`nav ${scrolled ? 'is-scrolled' : ''}`}>
-      <div className="nav__inner container">
-        <Logo />
-
-        <nav className="nav__links" aria-label="Primary">
-          {LINKS.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className={`nav__link ${active === l.href ? 'is-active' : ''}`}
-              aria-current={active === l.href ? 'true' : undefined}
-            >
-              {l.label}
-            </a>
-          ))}
-        </nav>
-
-        <div className="nav__actions">
-          <button className="btn btn-primary nav__cta" onClick={() => openDemo()}>
-            Book a demo
-          </button>
-          <button
-            className={`nav__burger ${open ? 'is-open' : ''}`}
-            aria-label={open ? 'Close menu' : 'Open menu'}
-            aria-expanded={open}
-            onClick={() => setOpen((v) => !v)}
-          >
-            <span />
-            <span />
-          </button>
-        </div>
-      </div>
-
-      {/* mobile sheet */}
-      <div className={`nav__sheet ${open ? 'is-open' : ''}`} onClick={() => setOpen(false)}>
-        <div className="nav__sheetInner" onClick={(e) => e.stopPropagation()}>
-          {LINKS.map((l) => (
-            <a key={l.href} href={l.href} className="nav__sheetLink" onClick={() => setOpen(false)}>
-              {l.label}
-            </a>
-          ))}
-          <button
-            className="btn btn-primary nav__sheetCta"
-            onClick={() => {
-              setOpen(false)
-              openDemo()
-            }}
-          >
-            Book a demo
-          </button>
-        </div>
-      </div>
-    </header>
-  )
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(draw) }
+    draw()
+    addEventListener('scroll', schedule, { passive: true }); addEventListener('resize', schedule)
+    reduced.addEventListener('change', schedule)
+    return () => { cancelAnimationFrame(frame); removeEventListener('scroll', schedule); removeEventListener('resize', schedule); reduced.removeEventListener('change', schedule) }
+  }, [])
+  return <header ref={root} className="morph-nav">
+    <a ref={mark} href="#top" className="morph-nav__logo" aria-label="REVORA home"><img src="/assets/revora-logo.png" alt="REVORA" width="900" height="180" /></a>
+    <button className="morph-nav__toggle" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="primary-links" onClick={() => setOpen(!open)}>Menu</button>
+    <nav ref={links} id="primary-links" aria-label="Primary" className={`morph-nav__links ${open ? 'is-open' : ''}`}>
+      {[['How it works','#flow'],['For your business','#customize'],['Pricing','#pricing']].map(([label,href]) => <a key={href} href={href} onClick={() => setOpen(false)}>{label}</a>)}
+    </nav>
+    <dialog ref={dialog} className="morph-nav__dialog" aria-label="Mobile navigation"><button className="btn btn-ghost" onClick={close}>Close menu</button>{[['How it works','#flow'],['For your business','#customize'],['Pricing','#pricing']].map(([label,href])=><a key={href} href={href} onClick={close}>{label}</a>)}</dialog>
+  </header>
 }

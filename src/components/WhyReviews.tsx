@@ -1,48 +1,39 @@
-import Reveal from './Reveal'
-import './WhyReviews.css'
+import Reveal from "./Reveal";
+import "./WhyReviews.css";
 
 const POINTS = [
   {
-    k: 'Rank',
-    t: 'Higher ratings rank first',
-    b: 'Maps and local search push the best-rated places to the top of the list.',
+    k: "01",
+    t: "Hear the details that matter",
+    b: "A simple prompt helps guests explain what felt good, and what could be better.",
   },
   {
-    k: 'Trust',
-    t: 'Rating + count = instant trust',
-    b: 'More and better reviews win the click before anyone reads a word.',
+    k: "02",
+    t: "Keep the guest in control",
+    b: "Guests can edit a draft in their own words and choose whether to share a public review.",
   },
   {
-    k: 'Fresh',
-    t: 'Recent reviews keep you there',
-    b: 'A steady stream of fresh reviews signals a place that’s alive right now.',
+    k: "03",
+    t: "Give the conversation a next step",
+    b: "Bring useful feedback back to the people who can make the next visit better.",
   },
-  {
-    k: 'Compound',
-    t: 'Visibility compounds into walk-ins',
-    b: 'Being seen turns into footfall. Revora starts that loop and keeps it turning.',
-  },
-]
-
-const RANKS = [
-  { name: 'Your venue', tag: 'Revora-powered', score: '4.9', count: '340', you: true },
-  { name: 'The corner bistro', tag: 'Nearby', score: '4.4', count: '128', you: false },
-  { name: 'Riverside kitchen', tag: 'Nearby', score: '4.2', count: '96', you: false },
-  { name: 'Old town café', tag: 'Nearby', score: '4.0', count: '61', you: false },
-]
-
+];
 export default function WhyReviews() {
   return (
     <section className="section wr" id="reviews">
       <div className="container wr__grid">
         <div className="wr__copy">
           <Reveal>
-            <span className="eyebrow">Why Google reviews matter</span>
-            <h2 className="h2 wr__h2">Google reviews decide who walks in.</h2>
+            <span className="eyebrow">A little listening goes a long way</span>
+            <h2 className="h2 wr__h2">
+              Behind every review,
+              <br />
+              there’s a real experience.
+            </h2>
           </Reveal>
           <ul className="wr__points">
             {POINTS.map((p, i) => (
-              <Reveal as="li" key={p.k} className="wr__point" delay={i * 60}>
+              <Reveal as="li" key={p.k} className="wr__point" delay={i * 50}>
                 <span className="mono wr__pointK">{p.k}</span>
                 <div>
                   <h3 className="wr__pointT">{p.t}</h3>
@@ -52,28 +43,47 @@ export default function WhyReviews() {
             ))}
           </ul>
         </div>
-
-        <Reveal className="wr__widget glass" delay={120}>
-          <div className="wr__widgetHead">
-            <span className="mono wr__widgetLabel">Local search · “restaurants near me”</span>
+        <Reveal className="wr__example">
+          <div className="wr__exampleTop">
+            <span className="wr__exampleLogo">R</span>
+            <div>
+              <strong>A moment after the visit</strong>
+              <span>Illustrative guest feedback</span>
+            </div>
+            <span className="mono wr__sample">EXAMPLE</span>
           </div>
-          <ol className="wr__ranks">
-            {RANKS.map((r, i) => (
-              <li key={r.name} className={`wr__rank ${r.you ? 'is-you' : ''}`}>
-                <span className="mono wr__rankNo">{i + 1}</span>
-                <div className="wr__rankMain">
-                  <span className="wr__rankName">{r.name}</span>
-                  <span className="mono wr__rankTag">{r.tag}</span>
+          <p className="wr__question">How was your experience?</p>
+          <div className="wr__responses">
+            {[
+              { label: "The food", value: "Loved it", width: "88%" },
+              { label: "The service", value: "Thoughtful", width: "80%" },
+              { label: "The atmosphere", value: "Just right", width: "92%" },
+            ].map((row) => (
+              <div className="wr__response" key={row.label}>
+                <div>
+                  <span>{row.label}</span>
+                  <span>{row.value}</span>
                 </div>
-                {/* ratings as numbers only — no star glyphs */}
-                <span className="mono wr__rankScore">
-                  {r.score} <span className="wr__rankCount">· {r.count}</span>
-                </span>
-              </li>
+                <div className="wr__track">
+                  <span style={{ width: row.width }} />
+                </div>
+              </div>
             ))}
-          </ol>
+          </div>
+          <div className="wr__draft">
+            <span className="mono">A DRAFT, IN YOUR WORDS</span>
+            <p>
+              “A lovely place to slow down. The food was full of flavour, and
+              the team made us feel welcome.”
+            </p>
+            <span>Edit it. Make it yours. Share only if you want to.</span>
+          </div>
+          <p className="wr__disclaimer">
+            Sample content for demonstration. No feedback or review is
+            submitted.
+          </p>
         </Reveal>
       </div>
     </section>
-  )
+  );
 }

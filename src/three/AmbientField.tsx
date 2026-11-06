@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
+import AmbientFallback from '../components/AmbientFallback'
+import { usePageVisible } from '../hooks/usePageVisible'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import './AmbientField.css'
 
@@ -156,17 +158,6 @@ function Stardust({ tex, reduced, count, spread, depth, size, opacity }: { tex: 
 }
 
 const pointer = { x: 0, y: 0 }
-if (typeof window !== 'undefined') {
-  window.addEventListener('pointermove', (e) => {
-    pointer.x = (e.clientX / window.innerWidth - 0.5) * 2
-    pointer.y = (e.clientY / window.innerHeight - 0.5) * 2
-  })
-  window.addEventListener('deviceorientation', (e) => {
-    if (e.gamma == null) return
-    pointer.x = Math.max(-1, Math.min(1, e.gamma / 30))
-    pointer.y = Math.max(-1, Math.min(1, ((e.beta ?? 45) - 45) / 30))
-  })
-}
 
 function Rig({ reduced }: { reduced: boolean }) {
   const { camera } = useThree()
@@ -195,17 +186,6 @@ export default function AmbientField() {
   const [active, setActive] = useState(true)
   const webgl = useMemo(() => hasWebGL(), [])
 
-  // CSS-only fallback so the hero never renders an empty void without WebGL
-  if (!webgl) {
-    return (
-      <div className="ambient ambient--fallback" aria-hidden="true">
-        <span className="ambient__glow" />
-        <span className="ambient__ring ambient__ring--1" />
-        <span className="ambient__ring ambient__ring--2" />
-        <span className="ambient__ring ambient__ring--3" />
-      </div>
-    )
-  }
   // lighter scene on small screens / low-core devices
   const low = useMemo(
     () =>
@@ -223,10 +203,22 @@ export default function AmbientField() {
     return () => obs.disconnect()
   }, [])
 
+  useEffect(() => {
+    const move = (e: PointerEvent) => {
+      pointer.x = (e.clientX / window.innerWidth - 0.5) * 2
+      pointer.y = (e.clientY / window.innerHeight - 0.5) * 2
+    }
+    window.addEventListener('pointermove', move, { passive: true })
+    return () => window.removeEventListener('pointermove', move)
+  }, [])
+  useEffect(() => () => tex.dispose(), [tex])
+  const visible = usePageVisible()
+  if (!webgl) return <AmbientFallback />
+
   return (
     <div className="ambient" aria-hidden="true" ref={wrapRef}>
       <Canvas
-        frameloop={active ? 'always' : 'never'}
+        frameloop={!active || !visible ? 'never' : reduced ? 'demand' : 'always'}
         dpr={low ? [1, 1.5] : [1, 2]}
         camera={{ position: [0, 0, 9], fov: 46 }}
         gl={{ alpha: true, antialias: !low, powerPreference: 'high-performance' }}

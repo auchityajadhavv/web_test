@@ -1,0 +1,3 @@
+[functions.request-demo]
+# Public form: the function independently verifies Turnstile and applies a DB rate limit.
+verify_jwt = false

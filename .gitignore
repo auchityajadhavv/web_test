@@ -10,3 +10,12 @@ npm-debug.log*
 # tsc -b emitted artifacts
 vite.config.js
 vite.config.d.ts
+
+# Browser test outputs
+playwright-report/
+test-results/
+
+# Keep populated frontend and Edge Function environment files private
+.env
+.env.*
+!.env.example

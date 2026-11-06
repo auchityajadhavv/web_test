@@ -1,92 +1,58 @@
+.flow {
+  border-top: 1px solid var(--border-soft);
+}
 .flow__head {
   max-width: 44rem;
-  margin-bottom: clamp(48px, 7vw, 84px);
+  margin-bottom: 48px;
 }
 .flow__head .eyebrow {
   margin-bottom: 20px;
 }
 .flow__lead {
   margin-top: 18px;
+  font-size: 1rem;
+  max-width: 48ch;
 }
-
-/* 3D scene: card on the left, signal, phone on the right */
 .flow__stage {
   display: grid;
-  grid-template-columns: 1fr minmax(90px, 0.5fr) minmax(280px, 0.9fr);
+  grid-template-columns: 1.12fr 0.35fr 0.8fr;
   align-items: center;
-  gap: clamp(12px, 2vw, 32px);
-  margin-bottom: clamp(56px, 8vw, 96px);
-  perspective: 1700px;
+  gap: 24px;
+  margin-bottom: 40px;
 }
-
-/* the tapped card, tilted like it stands on the table */
-.flow__tap {
+.flow__tap,
+.flow__phone {
   position: relative;
-  transform: rotateY(11deg) rotateX(3deg);
-  transform-style: preserve-3d;
+  min-width: 0;
 }
 .flow__tapMedia {
   position: relative;
-  border-radius: var(--radius-lg);
   overflow: hidden;
-  border: 1px solid var(--border);
+  border: 1px solid #d8c8a52c;
+  border-radius: var(--radius-lg);
   background: #000;
-  aspect-ratio: 4 / 5;
-  box-shadow: 0 40px 80px -30px #000, 0 0 0 1px #ffffff0a inset;
+  aspect-ratio: 1.1;
+  box-shadow: 0 30px 70px -30px #000;
 }
-.flow__tapMedia video {
+.flow__tapMedia video,
+.flow__tapMedia > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.94;
 }
 .flow__tapTag {
   position: absolute;
   left: 16px;
   bottom: 14px;
-  font-size: 0.68rem;
-  letter-spacing: 0.16em;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--lilac2);
-  background: rgba(10, 8, 18, 0.6);
-  backdrop-filter: blur(8px);
+  color: #dfc88e;
+  background: #0a0805d9;
   padding: 6px 11px;
   border-radius: 999px;
-  border: 1px solid var(--border);
+  border: 1px solid #dfc88e25;
 }
-/* soft reflection under the card */
-.flow__reflection {
-  position: absolute;
-  left: 8%;
-  right: 8%;
-  bottom: -26px;
-  height: 40px;
-  background: radial-gradient(60% 100% at 50% 0%, rgba(124, 58, 237, 0.3), transparent 70%);
-  filter: blur(10px);
-}
-
-.flow__ripple {
-  position: absolute;
-  top: 42%;
-  left: 50%;
-  width: 90px;
-  height: 90px;
-  margin: -45px 0 0 -45px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(196, 166, 255, 0.5);
-  z-index: 2;
-  animation: flow-ripple 2.8s ease-out infinite;
-  pointer-events: none;
-}
-.flow__ripple--2 {
-  animation-delay: 1.4s;
-}
-@keyframes flow-ripple {
-  0% { transform: scale(0.4); opacity: 0.8; }
-  100% { transform: scale(2.4); opacity: 0; }
-}
-
-/* ---- the signal wire ---- */
 .flow__link {
   display: flex;
   flex-direction: column;
@@ -94,67 +60,65 @@
   gap: 12px;
 }
 .flow__linkLabel {
-  font-size: 0.62rem;
-  letter-spacing: 0.28em;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--text3);
 }
 .flow__wire {
   position: relative;
   width: 100%;
-  height: 2px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, transparent, rgba(154, 127, 214, 0.4) 20%, rgba(154, 127, 214, 0.4) 80%, transparent);
-  overflow: visible;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #9a7fd666 20%,
+    #9a7fd666 80%,
+    transparent
+  );
 }
 .flow__pulse {
   position: absolute;
   top: 50%;
   left: 0;
-  width: 10px;
-  height: 10px;
-  margin-top: -5px;
+  width: 7px;
+  height: 7px;
+  margin-top: -3.5px;
   border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 12px 3px var(--lilac2), 0 0 4px #fff;
-  animation: flow-pulse 2.6s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  background: var(--lilac2);
+  box-shadow: 0 0 12px #c4a6ff66;
+  animation: flow-pulse 2.6s ease-in-out infinite;
 }
 .flow__pulse--2 {
   animation-delay: 1.3s;
 }
 @keyframes flow-pulse {
-  0% { left: 0; opacity: 0; transform: scale(0.5); }
-  12% { opacity: 1; transform: scale(1); }
-  88% { opacity: 1; transform: scale(1); }
-  100% { left: 100%; opacity: 0; transform: scale(0.5); }
-}
-
-/* ---- the phone waking up ---- */
-.flow__phone {
-  position: relative;
-  transform: rotateY(-11deg) rotateX(3deg);
-  transform-style: preserve-3d;
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
 }
 .flow__phoneGlow {
   position: absolute;
   inset: -12% -8%;
   z-index: -1;
-  background: radial-gradient(50% 45% at 50% 42%, rgba(124, 58, 237, 0.4), transparent 70%);
+  background: radial-gradient(50% 45% at 50% 42%, #7c3aed33, transparent 70%);
   filter: blur(30px);
-  animation: flow-wake 2.6s ease-in-out infinite;
 }
-@keyframes flow-wake {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 0.9; }
-}
-
-/* try-it-yourself */
 .flow__try {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  margin-bottom: clamp(48px, 7vw, 84px);
+  margin-bottom: 44px;
 }
 .flow__try .btn {
   padding: 0.95em 1.9em;
@@ -162,18 +126,18 @@
   gap: 10px;
 }
 .flow__tryNote {
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
+  font-size: 0.64rem;
+  letter-spacing: 0.04em;
+  text-align: center;
   color: var(--text3);
 }
-
-/* steps strip */
 .flow__steps {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
   border-top: 1px solid var(--border-soft);
-  padding-top: clamp(32px, 4vw, 48px);
+  padding: 32px 0 0;
+  list-style: none;
 }
 .flow__step {
   display: flex;
@@ -181,70 +145,69 @@
   gap: 8px;
 }
 .flow__stepNo {
-  font-size: 0.74rem;
+  font-size: 0.7rem;
   letter-spacing: 0.1em;
-  color: var(--gold);
+  color: var(--lilac);
 }
 .flow__stepTitle {
-  font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 500;
   font-size: 1.1rem;
   letter-spacing: -0.02em;
+  line-height: 1.35;
 }
 .flow__stepBody {
   color: var(--text2);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
+  line-height: 1.8;
 }
-
-/* ---- responsive: flatten + stack, signal points down ---- */
 @media (max-width: 880px) {
   .flow__stage {
     grid-template-columns: 1fr;
     justify-items: center;
-    gap: 26px;
-    perspective: none;
+    gap: 22px;
   }
-  .flow__tap,
+  .flow__tap {
+    width: min(420px, 100%);
+  }
   .flow__phone {
-    transform: none;
-    width: min(360px, 82vw);
+    width: min(300px, 90%);
   }
   .flow__link {
     width: 40px;
   }
   .flow__wire {
-    width: 2px;
-    height: 54px;
-    background: linear-gradient(180deg, transparent, rgba(154, 127, 214, 0.4) 20%, rgba(154, 127, 214, 0.4) 80%, transparent);
+    width: 1px;
+    height: 44px;
+    background: linear-gradient(180deg, transparent, #9a7fd666, transparent);
   }
   .flow__pulse {
-    left: 50% !important;
-    margin-left: -5px;
-    animation: flow-pulse-v 2.6s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  }
-  @keyframes flow-pulse-v {
-    0% { top: 0; opacity: 0; transform: scale(0.5); }
-    12% { opacity: 1; transform: scale(1); }
-    88% { opacity: 1; transform: scale(1); }
-    100% { top: 100%; opacity: 0; transform: scale(0.5); }
+    left: 50%;
+    margin-left: -3.5px;
+    animation-name: flow-pulse-vertical;
   }
   .flow__steps {
     grid-template-columns: 1fr 1fr;
-    gap: 24px 20px;
+    gap: 25px;
   }
 }
-@media (max-width: 460px) {
-  .flow__steps {
-    grid-template-columns: 1fr;
+@keyframes flow-pulse-vertical {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
   }
 }
-
 @media (prefers-reduced-motion: reduce) {
-  .flow__ripple,
-  .flow__pulse,
-  .flow__phoneGlow {
+  .flow__pulse {
     animation: none;
+    opacity: 0.7;
+    left: 50%;
   }
-  .flow__ripple { opacity: 0.3; }
-  .flow__pulse { opacity: 0.8; left: 50%; }
 }

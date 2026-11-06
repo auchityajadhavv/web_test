@@ -1,53 +1,16 @@
-import { Suspense, lazy } from 'react'
-import TryDemo from './TryDemo'
+import { useEffect, useRef } from 'react'
 import { openDemo } from '../lib/openDemo'
 import './Hero.css'
-
-// defer the 3D field (three.js) so hero text paints immediately
-const AmbientField = lazy(() => import('../three/AmbientField'))
-
-const STATS = [
-  { big: '2×', label: 'Google reviews' },
-  { big: '60s', label: 'to go live' },
-  { big: '1 tap', label: 'for guests' },
-]
-
+import ArrowIcon from './ArrowIcon'
 export default function Hero() {
-  return (
-    <section className="hero" id="top">
-      <Suspense fallback={null}>
-        <AmbientField />
-      </Suspense>
-      <div className="hero__scrim" aria-hidden="true" />
-
-      <div className="container hero__inner">
-        <span className="eyebrow">Feedback that becomes reputation</span>
-        <h1 className="hero__h1">
-          Experiences that <span className="text-purple">matter.</span>
-        </h1>
-        <p className="lead hero__sub">
-          The premium way your guests tell you how it really went — one tap,
-          private feedback, then a Google review.
-        </p>
-        <div className="hero__actions">
-          <button className="btn btn-primary" onClick={() => openDemo()}>Book a demo</button>
-          <TryDemo label="Try it yourself" variant="ghost" />
-          <a href="#flow" className="hero__link">See how it works →</a>
-        </div>
-        <dl className="hero__stats">
-          {STATS.map((s) => (
-            <div key={s.label} className="hero__stat">
-              <dt className="mono hero__statBig">{s.big}</dt>
-              <dd className="mono hero__statLabel">{s.label}</dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-
-      <a href="#flow" className="hero__cue" aria-label="Scroll to see how it works">
-        <span className="mono">Scroll</span>
-        <span className="hero__cueLine" />
-      </a>
-    </section>
-  )
+  const section=useRef<HTMLElement>(null)
+  useEffect(()=>{const el=section.current;if(!el)return;const update=()=>{el.style.setProperty('--light-play',document.hidden?'paused':'running')};const observer=new IntersectionObserver(([entry])=>el.style.setProperty('--light-play',entry.isIntersecting&&!document.hidden?'running':'paused'));observer.observe(el);document.addEventListener('visibilitychange',update);return()=>{observer.disconnect();document.removeEventListener('visibilitychange',update)}},[])
+  return <section ref={section} className="hero" id="top"><div className="hero__light" aria-hidden="true" />
+    <div className="container hero__inner"><div className="hero__copy">
+      <h1>Experiences<br/>that matter.</h1>
+      <p>Customer feedback and Google reviews.<br/>One simple tap or scan.</p>
+      <div className="hero__actions"><button className="btn liquid-button" onClick={() => openDemo()}>Book a demo <ArrowIcon /></button><a className="btn btn-ghost" href="#flow">See how it works</a></div>
+    </div><div className="hero__product"><img src="/assets/revora-selected.webp" alt="REVORA feedback stand with a translucent edge, custom business name, NFC and QR code" width="1254" height="1254" /></div></div>
+    <a href="#customize" className="hero__scroll" aria-label="Customize your stand">⌄</a>
+  </section>
 }

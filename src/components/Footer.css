@@ -85,3 +85,23 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+.footer__colTitle {
+  color: var(--lilac);
+}
+.footer__link {
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+.footer__cols {
+  grid-template-columns: 0.9fr 0.9fr 1.2fr;
+}
+@media (max-width: 600px) {
+  .footer__cols {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .footer__col:last-child {
+    grid-column: 1 / -1;
+  }
+}

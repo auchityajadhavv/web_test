@@ -1,17 +1,18 @@
+.wr {
+  background: linear-gradient(180deg, transparent, #a78bfa04, transparent);
+}
 .wr__grid {
   display: grid;
-  grid-template-columns: 1fr 0.95fr;
-  gap: clamp(32px, 5vw, 72px);
-  align-items: start;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 7vw, 95px);
+  align-items: center;
 }
-
 .wr__copy .eyebrow {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 .wr__h2 {
-  margin-bottom: 40px;
+  margin-bottom: 34px;
 }
-
 .wr__points {
   display: flex;
   flex-direction: column;
@@ -19,104 +20,132 @@
 }
 .wr__point {
   display: flex;
-  gap: 18px;
+  gap: 20px;
 }
 .wr__pointK {
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gold);
-  padding-top: 4px;
-  min-width: 4.5rem;
+  color: var(--lilac);
+  font-size: 0.64rem;
+  padding-top: 3px;
 }
 .wr__pointT {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.12rem;
-  letter-spacing: -0.015em;
-  margin-bottom: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.4;
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
 }
 .wr__pointB {
   color: var(--text2);
-  font-size: 0.95rem;
+  font-size: 0.85rem;
+  line-height: 1.8;
   max-width: 42ch;
 }
-
-/* ranking widget */
-.wr__widget {
-  border-radius: var(--radius-lg);
-  padding: 26px;
-  position: sticky;
-  top: 100px;
+.wr__example {
+  padding: clamp(22px, 3vw, 36px);
+  border: 1px solid #b296e72c;
+  border-radius: 24px;
+  background: linear-gradient(145deg, #17121e, #0d0c12);
+  box-shadow: 0 25px 60px #0002;
 }
-.wr__widgetHead {
-  margin-bottom: 18px;
-}
-.wr__widgetLabel {
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  color: var(--text3);
-}
-.wr__ranks {
+.wr__exampleTop {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.wr__rank {
-  display: grid;
-  grid-template-columns: 1.6rem 1fr auto;
+  gap: 12px;
   align-items: center;
-  gap: 14px;
-  padding: 16px 16px;
-  border-radius: var(--radius-sm);
-  border: 1px solid transparent;
-  background: #ffffff05;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-soft);
 }
-.wr__rank.is-you {
-  background: linear-gradient(100deg, rgba(124, 58, 237, 0.22), rgba(124, 58, 237, 0.06));
-  border-color: rgba(139, 92, 246, 0.5);
-  box-shadow: var(--glow-purple);
+.wr__exampleLogo {
+  border-radius: 12px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-content: center;
+  background: #a78bfa16;
+  border: 1px solid #c4a6ff22;
+  color: #d6c8f2;
+  font-size: 1.2rem;
 }
-.wr__rankNo {
-  font-size: 0.9rem;
+.wr__exampleTop strong {
+  font-size: 0.78rem;
+  font-weight: 500;
+  display: block;
+}
+.wr__exampleTop div > span {
+  font-size: 0.66rem;
   color: var(--text3);
 }
-.is-you .wr__rankNo {
-  color: var(--lilac2);
+.wr__sample {
+  margin-left: auto;
+  color: var(--text3);
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
 }
-.wr__rankMain {
+.wr__question {
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  margin-block: 25px;
+}
+.wr__responses {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  min-width: 0;
+  gap: 21px;
 }
-.wr__rankName {
-  font-weight: 600;
-  font-size: 0.98rem;
+.wr__response > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.75rem;
+  margin-bottom: 9px;
+  color: var(--text2);
 }
-.wr__rankTag {
+.wr__response > div:first-child span:last-child {
+  color: var(--lilac2);
   font-size: 0.68rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text3);
 }
-.is-you .wr__rankTag {
+.wr__track {
+  height: 4px;
+  border-radius: 5px;
+  background: #ffffff0a;
+  overflow: hidden;
+}
+.wr__track > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #7850b5, #cbb3f1);
+  border-radius: inherit;
+}
+.wr__draft {
+  border: 1px solid var(--border-soft);
+  background: #ffffff03;
+  padding: 20px;
+  border-radius: 14px;
+  margin-top: 30px;
+}
+.wr__draft .mono {
+  font-size: 0.52rem;
+  letter-spacing: 0.12em;
   color: var(--lilac);
 }
-.wr__rankScore {
-  font-size: 0.95rem;
-  color: var(--text);
-  white-space: nowrap;
+.wr__draft p {
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-block: 12px;
+  letter-spacing: -0.025em;
 }
-.wr__rankCount {
+.wr__draft > span:last-child {
+  font-size: 0.66rem;
   color: var(--text3);
 }
-
-@media (max-width: 900px) {
+.wr__disclaimer {
+  font-size: 0.62rem;
+  color: var(--text3);
+  margin-top: 17px;
+  line-height: 1.7;
+}
+@media (max-width: 800px) {
   .wr__grid {
     grid-template-columns: 1fr;
-  }
-  .wr__widget {
-    position: static;
+    gap: 30px;
   }
 }
