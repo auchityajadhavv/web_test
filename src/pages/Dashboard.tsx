@@ -200,6 +200,9 @@ export default function Dashboard() {
           </p>
         </div>
         <div className="dash__headActions">
+          <Link to="/dashboard/stands" className="btn btn-primary dash__standsLink">
+            Manage stands
+          </Link>
           <span className="mono dash__who">{email}</span>
           <button className="btn btn-ghost dash__signout" onClick={signOut}>
             Sign out

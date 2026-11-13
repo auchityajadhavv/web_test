@@ -225,7 +225,7 @@ test("dashboard paginates and retains saved status when an update fails", async 
   expect(mobileStatus!.x + mobileStatus!.width).toBeLessThanOrEqual(390);
 });
 
-test("mobile and reduced-motion visitors avoid the 3D bundle and map is deferred", async ({
+test("mobile and reduced-motion visitors avoid obsolete 3D and map bundles", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -325,58 +325,6 @@ test("approved admin must complete authenticator verification before dashboard a
   expect(verified).toBe(true);
 });
 
-test("deferred map loads without crashing and reports missing map resources", async ({
-  page,
-}) => {
-  const errors: string[] = [];
-  page.on("pageerror", (error) => errors.push(error.message));
-  await page.route("https://tiles.openfreemap.org/**", (route) =>
-    route.abort(),
-  );
-  await page.goto("/");
-  // Mounting the map is independent of the heavy module's network request.
-  await page.locator("#map").scrollIntoViewIfNeeded();
-  await expect(
-    page.getByRole("heading", { name: "Picture your venue on the map." }),
-  ).toBeVisible();
-  await expect(page.getByRole("status")).toContainText(
-    "interactive map is unavailable",
-  );
-  expect(errors).toEqual([]);
-});
-
-test("the upgraded map starts its worker and renders sample markers", async ({
-  page,
-}) => {
-  const errors: string[] = [];
-  page.on("pageerror", (error) => errors.push(error.message));
-  page.on("console", (message) => {
-    if (message.type() === "error" && message.text().includes("Worker"))
-      errors.push(message.text());
-  });
-  await page.route("https://tiles.openfreemap.org/**", (route) =>
-    route.fulfill({
-      contentType: "application/json",
-      body: JSON.stringify({
-        version: 8,
-        sources: {},
-        layers: [
-          {
-            id: "background",
-            type: "background",
-            paint: { "background-color": "#121018" },
-          },
-        ],
-      }),
-    }),
-  );
-  await page.goto("/");
-  await page.locator("#map").scrollIntoViewIfNeeded();
-  await expect(page.locator(".mm-store")).toHaveCount(3);
-  await expect(page.getByRole("status")).toHaveCount(0);
-  expect(errors).toEqual([]);
-});
-
 test("password setup requires an authenticated approved admin", async ({
   page,
 }) => {
@@ -454,21 +402,6 @@ test("pricing opens a plan-specific request and restores keyboard focus", async 
   await expect(page.locator(".dm__plan")).toHaveText("Plan · Growth");
   await page.keyboard.press("Escape");
   await expect(plan).toBeFocused();
-});
-
-test("the sample map anchor works before its code has loaded", async ({
-  page,
-}) => {
-  await page.route("https://tiles.openfreemap.org/**", (route) =>
-    route.abort(),
-  );
-  await page.goto("/");
-  await expect(page.locator("#map")).toHaveCount(1);
-  await page.getByRole("link", { name: "On the map", exact: true }).click();
-  await expect(page).toHaveURL(/#map$/);
-  await expect(
-    page.getByRole("heading", { name: "Picture your venue on the map." }),
-  ).toBeVisible();
 });
 
 test("product hero and pricing stay inside mobile and tablet viewports", async ({

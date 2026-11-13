@@ -15,7 +15,7 @@ html {
   scroll-behavior: smooth;
   /* Firefox: thin themed scrollbar */
   scrollbar-width: thin;
-  scrollbar-color: var(--lilac) transparent;
+  scrollbar-color: #aeb4bd transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -35,11 +35,11 @@ html {
 ::-webkit-scrollbar-thumb {
   border-radius: 999px;
   border: 3px solid #0a0a12; /* inset so the thumb reads as a slim pill */
-  background: linear-gradient(180deg, var(--purple2), var(--lilac));
+  background: linear-gradient(180deg, #d9dde2, #8c929a);
   background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--lilac), var(--lilac2));
+  background: linear-gradient(180deg, #f4f5f6, #aeb4bd);
   background-clip: content-box;
 }
 ::-webkit-scrollbar-corner {
@@ -99,13 +99,13 @@ ul {
 }
 
 :focus-visible {
-  outline: 2px solid var(--lilac2);
+  outline: 2px solid #f1f2f3;
   outline-offset: 3px;
   border-radius: 4px;
 }
 
 ::selection {
-  background: rgba(124, 58, 237, 0.4);
+  background: rgba(210, 215, 222, 0.32);
   color: #fff;
 }
 
@@ -133,7 +133,7 @@ ul {
   font-weight: 500;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--lilac);
+  color: #c6cbd1;
   display: inline-flex;
   align-items: center;
   gap: 0.7em;
@@ -143,7 +143,7 @@ ul {
   content: "";
   width: 28px;
   height: 1px;
-  background: linear-gradient(90deg, var(--purple), transparent);
+  background: linear-gradient(90deg, #f4f5f6, transparent);
 }
 
 .h2 {
@@ -159,7 +159,7 @@ ul {
 }
 
 .text-purple {
-  background: linear-gradient(96deg, var(--purple2) 0%, var(--lilac2) 100%);
+  background: linear-gradient(96deg, #aeb4bd 0%, #f2f4f6 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -191,12 +191,12 @@ ul {
 .btn-primary {
   background: var(--btn);
   color: var(--btn-text);
-  box-shadow: 0 10px 30px -10px rgba(196, 166, 255, 0.5);
+  box-shadow: 0 10px 30px -10px rgba(255,255,255,.2);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 16px 40px -12px rgba(196, 166, 255, 0.7);
+  box-shadow: 0 16px 40px -12px rgba(255,255,255,.25);
 }
 
 .btn-ghost {
@@ -246,7 +246,7 @@ ul {
   box-shadow: none;
 }
 .btn-primary:hover {
-  box-shadow: 0 8px 24px -12px #c4a6ff66;
+  box-shadow: 0 8px 24px -12px #ffffff55;
 }
 .btn-ghost {
   background: #ffffff05;

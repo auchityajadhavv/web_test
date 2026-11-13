@@ -12,7 +12,7 @@ const BENEFITS = [
   },
   {
     title: "A considered detail.",
-    body: "Black acrylic, brushed gold, and a place on your counter. Explore branding that fits your venue.",
+    body: "Matte black, a metallic-silver finish, and a place on your counter. Explore branding that fits your business.",
   },
 ];
 export default function WhyRevora() {

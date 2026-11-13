@@ -46,11 +46,29 @@ test('PostgreSQL denies direct access unless an approved admin has MFA; only sta
     await assert.rejects(db.query("update public.demo_requests set email = 'attacker@example.com'"), /permission denied/)
     await assert.rejects(db.query("delete from public.demo_requests"), /permission denied/)
     await assert.rejects(db.query("select * from public.reserve_demo_request(gen_random_uuid(),repeat('a',64),repeat('b',64),'A','B','a@b.com','Demo','')"), /permission denied/)
+    const setup = await db.query("select * from public.create_stand_setup(null,'Example Studio','Main counter','Front stand','https://example.com/review','#202124','#F2F3F4')")
+    const standId = setup.rows[0].stand_id
+    const standCode = setup.rows[0].public_code
+    assert.match(standCode, /^[0-9a-f]{32}$/)
+    assert.equal((await db.query('select count(*)::int as count from public.stands')).rows[0].count, 1)
     await role('authenticated', outsider, 'aal2')
     await db.query("update public.demo_requests set status = 'closed'")
+    assert.equal((await db.query('select * from public.stands')).rows.length, 0)
+    await assert.rejects(db.query("select * from public.submit_guest_feedback($1,repeat('a',64),'{\"service\":5,\"quality\":5,\"overall\":5}'::jsonb,'Good')", [standCode]), /permission denied/)
+    await assert.rejects(db.query('select * from public.get_admin_feedback_metrics()'), /not authorized/)
     await role('authenticated', owner, 'aal2')
     assert.equal((await db.query('select status from public.demo_requests')).rows[0].status, 'contacted')
+    assert.equal((await db.query('select * from public.stands where id = $1', [standId])).rows.length, 1)
     // Service-only submissions: duplicates, busy leases, changed payloads and limits.
+    await role('service_role', owner)
+    const feedbackId = (await db.query("select public.submit_guest_feedback($1,repeat('d',64),'{\"service\":5,\"quality\":4,\"overall\":5}'::jsonb,'Very good') as id", [standCode])).rows[0].id
+    await db.query('select public.mark_review_click($1,$2)', [standCode, feedbackId])
+    assert.equal((await db.query('select review_clicked from public.feedback_sessions where id = $1', [feedbackId])).rows[0].review_clicked, true)
+    await role('authenticated', owner, 'aal2')
+    const metrics = (await db.query('select * from public.get_admin_feedback_metrics()')).rows[0]
+    assert.equal(metrics.total_feedback, 1)
+    assert.equal(Number(metrics.average_overall), 5)
+    assert.equal(metrics.review_clicks, 1)
     await role('service_role', owner)
     const key = '33333333-3333-4333-8333-333333333333'
     const reserve = (id = key, hash = 'a'.repeat(64)) => db.query(`select * from public.reserve_demo_request($1,$2,$3,'A','Venue',$4,'Need a demo','')`, [id, hash, 'b'.repeat(64), `${id}@example.com`])

@@ -34,7 +34,6 @@
   aspect-ratio: 1.1;
   box-shadow: 0 30px 70px -30px #000;
 }
-.flow__tapMedia video,
 .flow__tapMedia > img {
   width: 100%;
   height: 100%;
@@ -72,8 +71,8 @@
   background: linear-gradient(
     90deg,
     transparent,
-    #9a7fd666 20%,
-    #9a7fd666 80%,
+    #d8dce266 20%,
+    #d8dce266 80%,
     transparent
   );
 }
@@ -85,8 +84,8 @@
   height: 7px;
   margin-top: -3.5px;
   border-radius: 50%;
-  background: var(--lilac2);
-  box-shadow: 0 0 12px #c4a6ff66;
+  background: #f4f5f6;
+  box-shadow: 0 0 12px #ffffff80;
   animation: flow-pulse 2.6s ease-in-out infinite;
 }
 .flow__pulse--2 {
@@ -110,8 +109,7 @@
   position: absolute;
   inset: -12% -8%;
   z-index: -1;
-  background: radial-gradient(50% 45% at 50% 42%, #7c3aed33, transparent 70%);
-  filter: blur(30px);
+  background: radial-gradient(50% 45% at 50% 42%, #ffffff18, transparent 70%);
 }
 .flow__try {
   display: flex;
@@ -178,7 +176,7 @@
   .flow__wire {
     width: 1px;
     height: 44px;
-    background: linear-gradient(180deg, transparent, #9a7fd666, transparent);
+    background: linear-gradient(180deg, transparent, #d8dce266, transparent);
   }
   .flow__pulse {
     left: 50%;

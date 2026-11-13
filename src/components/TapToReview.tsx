@@ -1,10 +1,6 @@
-import { useEffect, useRef } from "react";
-import { useReducedMotion } from "../hooks/useReducedMotion";
-import { usePageVisible } from "../hooks/usePageVisible";
 import Reveal from "./Reveal";
 import ReviewPhone from "./ReviewPhone";
 import TryDemo from "./TryDemo";
-import { useInView } from "../hooks/useInView";
 import "./TapToReview.css";
 
 const STEPS = [
@@ -31,31 +27,6 @@ const STEPS = [
 ];
 
 export default function TapToReview() {
-  // only load the (heavy) tap video once the section is near the viewport
-  const [tapRef, tapInView] = useInView<HTMLDivElement>({
-    rootMargin: "300px",
-  });
-
-  const reduced = useReducedMotion();
-  const visible = usePageVisible();
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const connection = (
-    navigator as Navigator & { connection?: { saveData?: boolean } }
-  ).connection;
-  const playVideo = tapInView && !reduced && !connection?.saveData;
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && visible) void video.play().catch(() => {});
-      else video.pause();
-    });
-    observer.observe(video);
-    return () => {
-      observer.disconnect();
-      video.pause();
-    };
-  }, [playVideo, visible]);
   return (
     <section className="section flow" id="flow">
       <div className="container">
@@ -71,24 +42,15 @@ export default function TapToReview() {
         <Reveal className="flow__stage">
           {/* the tap — a card standing on the table */}
           <div className="flow__tap">
-            <div className="flow__tapMedia" ref={tapRef}>
-              {playVideo ? (
-                <video
-                  ref={videoRef}
-                  src="/assets/revora-tap.mp4"
-                  poster="/assets/poster.jpg"
-                  muted
-                  loop
-                  playsInline
-                  preload="metadata"
-                  aria-label="A hand tapping the REVORA card"
-                />
-              ) : (
-                <img
-                  src="/assets/poster.jpg"
-                  alt="A hand about to tap the REVORA card"
-                />
-              )}
+            <div className="flow__tapMedia">
+              <img
+                src="/assets/poster.jpg"
+                alt="A hand about to tap the REVORA card"
+                loading="lazy"
+                decoding="async"
+                width="1200"
+                height="1091"
+              />
               <span className="flow__tapTag mono">NFC · tap to open</span>
             </div>
           </div>

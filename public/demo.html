@@ -1,216 +1,45 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>REVORA — Feedback</title>
-<link rel="stylesheet" href="/fonts/fonts.css">
-<script type="module" src="/demo-background.js"></script>
-<style>
-:root{
-  --p:#7C3AED; --s:#9A7FD6; --cyan:#67E8F9; --mag:#F0ABFC;
-  --tx:#fff; --tx2:#9CA3AF;
-  --sat:'Satoshi','Inter',system-ui,sans-serif;
-  --inter:'Inter',system-ui,sans-serif;
-  --mono:'Geist Mono',ui-monospace,monospace;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{
-  background:
-    radial-gradient(1000px 600px at 20% -5%,#120e22 0%,transparent 55%),
-    radial-gradient(900px 700px at 100% 8%,#0b0a16 0%,transparent 50%), #050308;
-  color:var(--tx);font-family:var(--inter);-webkit-font-smoothing:antialiased;
-  display:flex;align-items:center;justify-content:center;overflow:hidden;
-}
-.stage{
-  position:relative;width:min(440px, calc(94vh * 9/16));aspect-ratio:9/16;
-  border-radius:38px;overflow:hidden;background:#06050a;border:1px solid #ffffff12;
-  box-shadow:0 1px 0 #ffffff10 inset, 0 60px 120px -50px #000, 0 0 0 1px #0007;
-  perspective:1100px;perspective-origin:50% 42%;
-}
-canvas#gl{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block;pointer-events:none}
-.fallback{position:absolute;inset:0;z-index:0;
-  background:radial-gradient(60% 50% at 42% 26%,#171326,transparent 62%),
-            radial-gradient(50% 40% at 78% 40%,#241645,transparent 60%),#06050a}
-.vig{position:absolute;inset:0;z-index:3;pointer-events:none;box-shadow:inset 0 0 140px 26px #000a}
-.grain{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.045;mix-blend-mode:overlay;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-
-/* .ui scrolls so the primary button is ALWAYS reachable */
-.ui{position:absolute;inset:0;z-index:2;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
-.ui::-webkit-scrollbar{display:none}
-.panel{min-height:100%;width:100%;
-  padding:max(30px,env(safe-area-inset-top)) 26px max(26px,env(safe-area-inset-bottom));
-  display:flex;flex-direction:column;transform-style:preserve-3d;
-  transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translate3d(var(--tx,0),var(--ty,0),0);
-  transition:transform .3s cubic-bezier(.2,.7,.2,1);will-change:transform}
-
-.step{flex:1;display:flex;flex-direction:column;transform-style:preserve-3d}
-.step[hidden]{display:none}
-@keyframes rise{from{opacity:0;transform:translateZ(-90px) translateY(22px)}to{opacity:1;transform:none}}
-.anim{opacity:0;animation:rise .9s cubic-bezier(.2,.75,.2,1) forwards}
-
-/* header */
-.head{display:flex;align-items:center;justify-content:space-between;transform:translateZ(28px)}
-.brand{font-family:var(--sat);font-weight:900;font-size:15px;letter-spacing:.28em}
-.brand .g{background:linear-gradient(100deg,#efeaf8,#c9bce8,#efeaf8);background-size:220% 100%;
-  -webkit-background-clip:text;background-clip:text;color:transparent;animation:hue 9s linear infinite}
-@keyframes hue{to{background-position:220% 0}}
-.mark{width:22px;height:22px;position:relative;transform-style:preserve-3d;animation:tumble 13s linear infinite}
-.mark i{position:absolute;inset:0;border:1px solid #ffffff28;border-radius:50%}
-.mark i:nth-child(2){transform:rotateX(66deg)}
-.mark b{position:absolute;top:-2px;left:50%;width:4px;height:4px;border-radius:50%;background:var(--s);box-shadow:0 0 9px var(--s);transform:translateX(-50%)}
-@keyframes tumble{to{transform:rotateY(360deg) rotateX(18deg)}}
-
-.title{transform:translateZ(22px);margin:30px 0 6px}
-.title h1{font-family:var(--sat);font-weight:700;font-size:26px;line-height:1.12;letter-spacing:-.02em;color:#f3effc}
-.title p{color:#a99bcb;font-size:13px;margin-top:11px}
-
-.cards{display:flex;flex-direction:column;gap:12px;margin-top:24px;transform-style:preserve-3d}
-.card{position:relative;border-radius:18px;padding:16px 17px 18px;transform-style:preserve-3d;
-  background:linear-gradient(150deg,#ffffff0e,#ffffff03);border:1px solid #ffffff18;
-  box-shadow:0 24px 54px -34px #000, 0 1px 0 #ffffff22 inset;
-  transition:transform .28s cubic-bezier(.2,.7,.2,1), box-shadow .3s;will-change:transform}
-.card::before{content:"";position:absolute;inset:0;border-radius:18px;pointer-events:none;
-  background:linear-gradient(115deg,transparent 24%,#b9a6e83a 46%,#67e8f92e 56%,transparent 76%);
-  background-size:260% 100%;background-position:120% 0;mix-blend-mode:screen;opacity:.4;
-  animation:sweep 6.5s ease-in-out infinite}
-@keyframes sweep{0%,100%{background-position:120% 0}50%{background-position:-40% 0}}
-.card.active{box-shadow:0 40px 76px -34px var(--s),0 1px 0 #ffffff33 inset}
-.c-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:15px;transform:translateZ(16px)}
-.c-name{font-family:var(--sat);font-weight:500;font-size:14.5px;color:#efeaf8}
-.c-tier{font-family:var(--sat);font-weight:700;font-size:13.5px;color:#cfc4ea}
-@keyframes flip{0%{opacity:0;transform:rotateX(-70deg) translateY(5px)}100%{opacity:1;transform:none}}
-.c-tier.change .word{display:inline-block;animation:flip .34s cubic-bezier(.2,.8,.2,1)}
-
-/* slider — big touch target */
-.slider{position:relative;height:34px;display:flex;align-items:center;touch-action:none;cursor:grab;outline:none;transform-style:preserve-3d}
-.slider:active{cursor:grabbing}
-.slider:focus-visible .rail{box-shadow:0 2px 8px #0007 inset,0 0 0 2px var(--s)}
-.rail{position:relative;width:100%;height:6px;border-radius:99px;transform:translateZ(6px);
-  background:#ffffff0f;border:1px solid #ffffff20;box-shadow:0 2px 8px #0007 inset;overflow:hidden;pointer-events:none}
-.fill{position:absolute;left:0;top:0;bottom:0;width:calc(var(--v)*100%);border-radius:99px;
-  background:linear-gradient(90deg,#6b5aa0,#cfc4ea);box-shadow:0 0 14px -3px var(--s)}
-.fill::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#ffffff4d,transparent 55%)}
-.orb{position:absolute;top:50%;left:calc(var(--v)*100%);width:20px;height:20px;border-radius:50%;
-  transform:translate(-50%,-50%) translateZ(30px);
-  background:radial-gradient(circle at 36% 30%,#fff,#e6def7 60%,#b7a9de);
-  box-shadow:0 6px 15px -4px #000a,0 0 0 5px #ffffff14,0 0 14px var(--s);
-  transition:transform .16s cubic-bezier(.2,.8,.2,1);pointer-events:none}
-.slider.drag .orb{transform:translate(-50%,-50%) translateZ(46px) scale(1.2)}
-
-.more{transform:translateZ(14px);margin-top:16px;border-radius:16px;padding:14px 16px;
-  background:linear-gradient(150deg,#ffffff0c,#ffffff03);border:1px solid #ffffff16}
-.more label{display:block;font-family:var(--sat);font-weight:500;font-size:12px;color:#bcaee0;margin-bottom:9px}
-textarea{width:100%;resize:none;border:none;outline:none;background:transparent;color:#fff;
-  font-family:var(--inter);font-size:13.5px;line-height:1.55;overflow:hidden;scrollbar-width:none;-ms-overflow-style:none}
-textarea::-webkit-scrollbar{display:none;width:0;height:0}
-textarea::placeholder{color:#ffffff3d}
-.more textarea{min-height:44px}
-/* frosted-glass fields + focus glow */
-.more,.review{backdrop-filter:blur(11px);-webkit-backdrop-filter:blur(11px);
-  box-shadow:0 1px 0 #ffffff22 inset, 0 20px 46px -34px #000;
-  transition:border-color .25s ease, box-shadow .25s ease}
-.more:focus-within,.review:focus-within{border-color:#a98fe0cc;
-  box-shadow:0 0 0 1px #9a7fd655, 0 0 24px -6px #9a7fd6, 0 1px 0 #ffffff2e inset}
-
-.cta{transform:translateZ(24px);margin-top:auto;padding-top:20px}
-.btn{position:relative;width:100%;height:54px;border:none;border-radius:17px;cursor:pointer;overflow:hidden;
-  font-family:var(--sat);font-weight:900;font-size:15.5px;color:#0c0a14;
-  background:linear-gradient(92deg,#e7e0f5,#c3b6e6);
-  box-shadow:0 20px 44px -20px var(--s),0 1px 0 #ffffffcc inset;
-  transition:transform .2s,box-shadow .2s}
-.btn::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(115deg,transparent 30%,#ffffff88 48%,transparent 62%);transform:translateX(-120%)}
-.btn:hover{transform:translateY(-2px) translateZ(8px)}
-.btn:hover::after{transform:translateX(120%);transition:transform .7s ease}
-.btn:active{transform:scale(.99)}
-
-/* ---- step 2: review ---- */
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;transform:translateZ(14px)}
-.chip{font-family:var(--sat);font-weight:500;font-size:11.5px;letter-spacing:.01em;
-  padding:7px 11px;border-radius:99px;border:1px solid #ffffff1c;background:#ffffff0a;color:#d7cef0}
-.chip b{color:#fff;font-weight:700}
-.review{transform:translateZ(14px);margin-top:18px;border-radius:16px;padding:15px 16px;
-  background:linear-gradient(150deg,#ffffff0f,#ffffff04);border:1px solid #ffffff1e;position:relative}
-.review .rlabel{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.review .rlabel span{font-family:var(--sat);font-weight:500;font-size:12px;color:#bcaee0}
-.regen{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#b9a6e8;
-  background:none;border:none;cursor:pointer;padding:4px 2px;transition:color .2s}
-.regen:hover{color:#e6def7}
-.review textarea{min-height:118px}
-.hintline{transform:translateZ(10px);margin-top:14px;font-size:11.5px;color:#8f83ac;line-height:1.5}
-.ghost{background:none;border:1px solid #ffffff22;color:#cfc4ea;box-shadow:none;margin-top:10px;height:46px;
-  font-weight:500;font-size:13.5px}
-.ghost:hover{transform:translateY(-1px);border-color:#ffffff35}
-.back{align-self:flex-start;margin-bottom:4px;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;
-  text-transform:uppercase;color:#8f83ac;background:none;border:none;cursor:pointer;padding:6px 0}
-.back:hover{color:#c9bce8}
-
-.hint{position:absolute;left:0;right:0;bottom:14px;z-index:4;text-align:center;
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:#ffffff4d;
-  pointer-events:none;transition:opacity .6s}
-
-@media (max-width:480px){
-  .stage{width:100vw;height:100vh;height:100dvh;aspect-ratio:auto;border-radius:0;border:none;box-shadow:none}
-}
-@media (prefers-reduced-motion:reduce){*{animation:none!important}.panel{transition:none}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>REVORA — Guest feedback demo</title>
+  <link rel="stylesheet" href="/fonts/fonts.css">
+  <style>
+    :root{color-scheme:dark;--bg:#101214;--panel:#1a1d20;--line:#ffffff1c;--muted:#aeb3ba;--white:#f4f5f6}
+    *{box-sizing:border-box;margin:0}html,body{height:100%}body{font-family:Inter,system-ui,sans-serif;color:var(--white);background:#0d0f11;display:grid;place-items:center;-webkit-font-smoothing:antialiased}
+    button,input,textarea{font:inherit}.stage{width:min(440px,100vw);height:min(900px,100dvh);min-height:640px;overflow:auto;border:1px solid #ffffff1d;border-radius:34px;background:radial-gradient(90% 55% at 50% 0,#30343a 0,transparent 70%),var(--bg);box-shadow:0 30px 90px #0008}
+    .panel{min-height:100%;padding:max(34px,env(safe-area-inset-top)) 25px max(26px,env(safe-area-inset-bottom));display:flex;flex-direction:column}.step{flex:1;display:flex;flex-direction:column}.step[hidden]{display:none}
+    .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}.head img{width:112px;height:auto}.privacy{font:500 9px/1 'Geist Mono',monospace;letter-spacing:.13em;color:var(--muted)}
+    h1{font-size:28px;line-height:1.1;letter-spacing:-.035em;font-weight:600}header p{color:var(--muted);font-size:13px;line-height:1.55;margin-top:10px}.cards{display:grid;gap:12px;margin-top:25px}
+    .card{padding:17px;border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,#ffffff0d,#ffffff04);box-shadow:inset 0 1px #ffffff0d}.card__top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:14px}.card__top span{font-size:13px}.card__top strong{font-size:12px;font-weight:600;color:#eef0f2}
+    input[type=range]{width:100%;height:30px;accent-color:#e9ecef;cursor:pointer}.more,.review{margin-top:16px;padding:15px 16px;border:1px solid var(--line);border-radius:15px;background:#ffffff05}.more label,.review label{display:block;font-size:11px;color:#c5c9ce;margin-bottom:9px}textarea{width:100%;min-height:58px;resize:none;border:0;outline:0;background:transparent;color:#fff;line-height:1.55}textarea::placeholder{color:#777d84}
+    .cta{margin-top:auto;padding-top:20px}.btn{width:100%;min-height:52px;border:1px solid #ffffff90;border-radius:15px;background:linear-gradient(145deg,#f6f7f8,#b6bbc2);color:#111315;font-weight:700;cursor:pointer;box-shadow:inset 0 1px #fff}.btn:active{transform:translateY(1px)}.btn--ghost{margin-top:10px;background:#ffffff06;color:#e7e9eb;border-color:#ffffff24;font-weight:500}
+    .back{align-self:flex-start;margin-bottom:22px;border:0;background:transparent;color:#c7cbd0;cursor:pointer}.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}.chip{padding:7px 10px;border:1px solid var(--line);border-radius:99px;background:#ffffff06;font-size:10px;color:#d6d9dd}.review textarea{min-height:150px}.hint{font-size:10px;line-height:1.5;color:#858b92;margin-top:12px}
+    @media(max-width:480px){.stage{width:100%;height:100dvh;border:0;border-radius:0}.panel{padding-inline:20px}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
 </head>
 <body>
-<div class="stage">
-  <canvas id="gl"></canvas>
-  <div class="fallback"></div>
-  <div class="vig"></div>
-  <div class="grain"></div>
-
-  <div class="ui"><div class="panel" id="panel">
-
-    <!-- STEP 1 · rate -->
-    <section class="step" id="step1">
-      <div class="head anim" style="animation-delay:.05s">
-        <div class="brand"><span class="g">REVORA</span></div>
-        <div class="mark"><i></i><i></i><b></b></div>
-      </div>
-      <div class="title anim" style="animation-delay:.12s">
-        <h1>How was your<br>experience today?</h1>
-        <p>Three quiet questions. Drag each one.</p>
-      </div>
-      <div class="cards" id="cards"></div>
-      <div class="more anim" style="animation-delay:.42s">
-        <label>Tell us more</label>
-        <textarea id="notes" placeholder="Anything that stood out — or we could do better?"></textarea>
-      </div>
-      <div class="cta anim" style="animation-delay:.5s">
-        <button class="btn" id="continue">Continue</button>
-      </div>
-    </section>
-
-    <!-- STEP 2 · review -->
-    <section class="step" id="step2" hidden>
-      <button class="back" id="back">← Back</button>
-      <div class="title" style="margin-top:6px">
-        <h1 id="rtitle">One tap from<br>the world seeing it</h1>
-        <p id="rsub">We turned your visit into a review. Make it yours, then post.</p>
-      </div>
-      <div class="chips" id="chips"></div>
-      <div class="review">
-        <div class="rlabel"><span>Your review</span><button class="regen" id="regen">Rewrite ↻</button></div>
-        <textarea id="reviewText" spellcheck="false"></textarea>
-      </div>
-      <p class="hintline" id="rhint">We’ll copy this and open Google — just paste and post.</p>
-      <div class="cta" style="margin-top:auto">
-        <button class="btn" id="post">Copy example review</button>
-        <button class="btn ghost" id="skip">No thanks, just send feedback</button>
-      </div>
-    </section>
-
-  </div></div>
-
-  <div class="hint" id="hint">Tilt · drag · explore</div>
-</div>
-
-<script src="/demo.js" defer></script>
+  <main class="stage">
+    <div class="panel">
+      <section class="step" id="step1">
+        <div class="head"><img src="/assets/revora-logo.png" alt="REVORA" width="900" height="183"><span class="privacy">PRIVATE FEEDBACK</span></div>
+        <header><h1>How was your experience today?</h1><p>Three quick questions. Your answers stay private unless you choose to share.</p></header>
+        <div class="cards" id="cards"></div>
+        <div class="more"><label for="notes">Tell the team more</label><textarea id="notes" placeholder="What stood out—or what could be better?"></textarea></div>
+        <div class="cta"><button class="btn" id="continue">Continue</button></div>
+      </section>
+      <section class="step" id="step2" hidden>
+        <button class="back" id="back">← Back</button>
+        <header><h1 id="rtitle">Your experience, in your words.</h1><p id="rsub">Edit the example below. Sharing publicly is always your choice.</p></header>
+        <div class="chips" id="chips"></div>
+        <div class="review"><label for="reviewText">Example review draft</label><textarea id="reviewText" spellcheck="false"></textarea></div>
+        <p class="hint">This demo copies text only. It does not submit feedback or publish a review.</p>
+        <div class="cta"><button class="btn" id="post">Copy example review</button><button class="btn btn--ghost" id="skip">Finish without sharing</button></div>
+      </section>
+    </div>
+  </main>
+  <script src="/demo.js" defer></script>
 </body>
 </html>

@@ -6,8 +6,8 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--purple);
-  box-shadow: 0 0 8px 2px rgba(124, 58, 237, 0.8);
+  background: #f1f2f3;
+  box-shadow: 0 0 8px 2px rgba(255,255,255,.38);
   animation: trydemo-spark 1.8s ease-in-out infinite;
 }
 @keyframes trydemo-spark {
@@ -23,8 +23,6 @@
   place-items: center;
   padding: 24px;
   background: rgba(4, 4, 8, 0.72);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   animation: trydemo-fade 0.25s ease;
 }
 @keyframes trydemo-fade {
@@ -81,7 +79,7 @@
   height: min(800px, 78vh);
   border-radius: 44px;
   padding: 6px;
-  background: linear-gradient(150deg, #34313b, #17151d 42%, #0b0a10);
+  background: linear-gradient(150deg, #555960, #24272c 42%, #0b0c0e);
   box-shadow: 0 40px 90px -30px #000, 0 0 0 1px #000;
 }
 .trydemo__phone iframe {

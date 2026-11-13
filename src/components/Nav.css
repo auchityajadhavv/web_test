@@ -1,10 +1,54 @@
-.morph-nav{position:fixed;inset:0 0 auto;height:82px;z-index:50;pointer-events:none;--nav-progress:0}
-.morph-nav::before{content:'';position:absolute;inset:0;background:linear-gradient(#111214ee,#111214cc);opacity:var(--nav-progress);backdrop-filter:blur(16px)}
-.morph-nav__logo{position:absolute;left:0;top:0;transform-origin:0 0;pointer-events:auto;will-change:transform;line-height:0}
-.morph-nav__logo img{width:100%;height:auto}
-.morph-nav__links{position:absolute;right:max(40px,calc((100vw - 1280px)/2));top:16px;display:flex;align-items:center;gap:32px;padding:12px 24px;border-radius:40px;pointer-events:auto;background:rgba(255,255,255,calc(var(--nav-progress)*.07));border:1px solid rgba(255,255,255,calc(var(--nav-progress)*.24));box-shadow:inset 0 1px rgba(255,255,255,calc(var(--nav-progress)*.2));white-space:nowrap;will-change:transform}
-.morph-nav__links a{font-size:14px;color:#ececee}.morph-nav__links a:hover{color:#fff;text-decoration:underline;text-underline-offset:6px}
-.morph-nav__toggle{display:none}
-@media(max-width:699px){.morph-nav__toggle{display:block;position:absolute;right:22px;top:18px;border:1px solid #ffffff40;padding:8px 16px;border-radius:30px;pointer-events:auto;background:#222426}.morph-nav__links{display:none;right:20px;top:68px;flex-direction:column;gap:20px;background:#202124f5;border:1px solid #ffffff30;backdrop-filter:blur(20px)}.morph-nav__links.is-open{display:flex}}
-.morph-nav__dialog{margin:auto;padding:28px;min-width:280px;background:#202124;color:white;border:1px solid #ffffff40;border-radius:24px;pointer-events:auto}.morph-nav__dialog[open]{display:flex;flex-direction:column;gap:24px}.morph-nav__dialog::backdrop{background:#0009;backdrop-filter:blur(8px)}
-@media(max-width:699px){.morph-nav__links.is-open{display:none}}
+.morph-nav {
+  position: fixed;
+  inset: 0 0 auto;
+  height: 78px;
+  z-index: 50;
+  pointer-events: none;
+  --nav-progress: 0;
+  contain: layout style;
+}
+.morph-nav::before {
+  content: '';
+  position: absolute;
+  inset: 8px max(14px, calc((100vw - 1320px) / 2));
+  border-radius: 22px;
+  background: rgba(18, 19, 21, calc(var(--nav-progress) * 0.94));
+  border: 1px solid rgba(255, 255, 255, calc(var(--nav-progress) * 0.16));
+  box-shadow: inset 0 1px rgba(255,255,255,calc(var(--nav-progress)*.12)),0 12px 34px rgba(0,0,0,calc(var(--nav-progress)*.28));
+  opacity: var(--nav-progress);
+}
+.morph-nav__logo { position:absolute;left:0;top:0;transform-origin:0 0;pointer-events:auto;line-height:0;will-change:transform; }
+.morph-nav__logo img { width:100%;height:auto; }
+.morph-nav__links {
+  position:absolute;right:max(40px,calc((100vw - 1280px)/2));top:15px;
+  display:flex;align-items:center;gap:clamp(20px,2.4vw,32px);padding:11px 22px;border-radius:40px;
+  pointer-events:auto;background:rgba(255,255,255,calc(var(--nav-progress)*.055));
+  border:1px solid rgba(255,255,255,calc(var(--nav-progress)*.18));
+  box-shadow:inset 0 1px rgba(255,255,255,calc(var(--nav-progress)*.12));
+  white-space:nowrap;will-change:transform;
+}
+.morph-nav__links a { font-size:14px;color:#e7e9ec; }
+.morph-nav__links a:hover { color:#fff;text-decoration:underline;text-underline-offset:6px; }
+.morph-nav__toggle { display:none; }
+.morph-nav__dialog {
+  margin:auto;padding:28px;min-width:280px;background:#191b1e;color:white;
+  border:1px solid #ffffff32;border-radius:24px;pointer-events:auto;box-shadow:0 24px 80px #000a;
+}
+.morph-nav__dialog[open] { display:flex;flex-direction:column;gap:24px; }
+.morph-nav__dialog::backdrop { background:#000c; }
+@media (min-width:700px) and (max-width:1099px) {
+  .morph-nav__links { right:30px;gap:18px;padding-inline:18px; }
+  .morph-nav__links a { font-size:13px; }
+}
+@media (max-width:699px) {
+  .morph-nav { height:68px; }
+  .morph-nav::before { inset:7px 10px;border-radius:18px; }
+  .morph-nav__toggle {
+    display:block;position:absolute;right:18px;top:15px;min-width:70px;min-height:40px;
+    border:1px solid #ffffff35;padding:8px 15px;border-radius:30px;pointer-events:auto;background:#202225;
+  }
+  .morph-nav__links,.morph-nav__links.is-open { display:none; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .morph-nav__logo,.morph-nav__links { will-change:auto; }
+}

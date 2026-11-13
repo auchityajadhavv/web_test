@@ -1,3 +1,7 @@
 [functions.request-demo]
 # Public form: the function independently verifies Turnstile and applies a DB rate limit.
 verify_jwt = false
+
+[functions.guest-feedback]
+# Public NFC/QR route: validates an unguessable stand code and applies DB rate limits.
+verify_jwt = false

@@ -12,27 +12,44 @@ export default function Nav() {
   useDialog(dialog, open, close)
   useEffect(() => {
     let frame = 0
+    let lastProgress = -1
+    let metrics = { width: 0, mobile: false, gutter: 0, initial: 0, end: 0, distance: 0, linkShift: 0 }
     const reduced = matchMedia('(prefers-reduced-motion: reduce)')
+    const measure = () => {
+      const width = innerWidth
+      const mobile = width < 700
+      const tablet = width >= 700 && width < 1100
+      const gutter = mobile ? 20 : tablet ? 30 : Math.max(40, (width - 1280) / 2)
+      const initial = Math.min(width - gutter * 2, 1280)
+      const end = mobile ? 116 : tablet ? 142 : 166
+      metrics = {
+        width, mobile, gutter, initial, end,
+        distance: mobile ? 150 : tablet ? 190 : 230,
+        linkShift: mobile ? 0 : Math.max(0, width / 2 - gutter - (tablet ? 190 : 225)),
+      }
+      if (mark.current) mark.current.style.width = `${initial}px`
+      lastProgress = -1
+    }
     const draw = () => {
       frame = 0
-      const w = innerWidth, mobile = w < 700
-      const gutter = mobile ? 22 : Math.max(40, (w - 1280) / 2)
-      const initial = Math.min(w - gutter * 2, 1280)
-      const end = mobile ? 125 : 166
-      const p = reduced.matches ? (scrollY > 30 ? 1 : 0) : Math.min(1, Math.max(0, scrollY / (mobile ? 200 : 390)))
+      const raw = reduced.matches ? (scrollY > 30 ? 1 : 0) : Math.min(1, Math.max(0, scrollY / metrics.distance))
+      const p = reduced.matches ? raw : 1 - Math.pow(1 - raw, 3)
+      if (Math.abs(p - lastProgress) < 0.001) return
+      lastProgress = p
       if (mark.current) {
-        mark.current.style.width = `${initial}px`
-        mark.current.style.transform = `translate3d(${gutter}px,${(mobile ? 90 : 108) * (1-p) + 25*p}px,0) scale(${1 + (end / initial - 1) * p})`
+        const startY = metrics.mobile ? 82 : 98
+        mark.current.style.transform = `translate3d(${metrics.gutter}px,${startY * (1-p) + 23*p}px,0) scale(${1 + (metrics.end / metrics.initial - 1) * p})`
       }
-      if (links.current) links.current.style.transform = `translateX(${mobile ? 0 : -(w / 2 - gutter - 225) * (1-p)}px)`
+      if (links.current) links.current.style.transform = `translate3d(${-metrics.linkShift * (1-p)}px,0,0)`
       root.current?.style.setProperty('--nav-progress', String(p))
-      root.current?.classList.toggle('is-docked', p > .95)
+      root.current?.classList.toggle('is-docked', p > .97)
     }
     const schedule = () => { if (!frame) frame = requestAnimationFrame(draw) }
-    draw()
-    addEventListener('scroll', schedule, { passive: true }); addEventListener('resize', schedule)
+    const resize = () => { measure(); schedule() }
+    measure(); draw()
+    addEventListener('scroll', schedule, { passive: true }); addEventListener('resize', resize, { passive: true })
     reduced.addEventListener('change', schedule)
-    return () => { cancelAnimationFrame(frame); removeEventListener('scroll', schedule); removeEventListener('resize', schedule); reduced.removeEventListener('change', schedule) }
+    return () => { cancelAnimationFrame(frame); removeEventListener('scroll', schedule); removeEventListener('resize', resize); reduced.removeEventListener('change', schedule) }
   }, [])
   return <header ref={root} className="morph-nav">
     <a ref={mark} href="#top" className="morph-nav__logo" aria-label="REVORA home"><img src="/assets/revora-logo.png" alt="REVORA" width="900" height="180" /></a>

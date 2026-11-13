@@ -20,7 +20,6 @@ const COLS: { title: string; links: Link[] }[] = [
     links: [
       { label: "Book a demo", action: "demo" },
       { label: "See the demo", href: "#flow" },
-      { label: "On the map", href: "#map" },
     ],
   },
   {

@@ -6,13 +6,13 @@ import "./Products.css";
 const PRODUCTS = [
   {
     name: "The card",
-    body: "A detachable black acrylic card. Customers tap with an NFC-enabled phone or scan the printed QR code.",
+    body: "A detachable matte-black card. Customers tap with an NFC-enabled phone or scan the printed QR code.",
     detail: "Two ways in. One simple experience.",
   },
   {
     name: "The stand",
-    body: "A weighted, brushed-graphite base that gives your feedback card a considered place on the counter.",
-    detail: "Black acrylic. Brushed graphite. Made to belong.",
+    body: "A stable, metallic-silver base that gives your feedback card a considered place on the counter.",
+    detail: "Matte black. Metallic silver. Made to belong.",
   },
   {
     name: "Your finishing touch",

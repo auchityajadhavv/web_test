@@ -6,8 +6,6 @@
   place-items: center;
   padding: 24px;
   background: rgba(4, 4, 8, 0.74);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   animation: dm-fade 0.25s ease;
 }
 @keyframes dm-fade {
@@ -25,11 +23,11 @@
   max-height: 92vh;
   overflow-y: auto;
   border-radius: var(--radius-lg);
-  border: 1px solid rgba(139, 92, 246, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.24);
   background:
     radial-gradient(
       120% 80% at 20% -10%,
-      rgba(124, 58, 237, 0.16),
+      rgba(255, 255, 255, 0.08),
       transparent 55%
     ),
     var(--card);
@@ -91,9 +89,9 @@
   display: inline-block;
   font-size: 0.72rem;
   letter-spacing: 0.08em;
-  color: var(--lilac2);
-  background: rgba(124, 58, 237, 0.16);
-  border: 1px solid rgba(139, 92, 246, 0.4);
+  color: #eef0f2;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   padding: 5px 12px;
   border-radius: 999px;
   margin-bottom: 22px;
@@ -136,8 +134,8 @@
 }
 .dm__field input:focus,
 .dm__field textarea:focus {
-  border-color: rgba(139, 92, 246, 0.7);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.18);
+  border-color: rgba(255, 255, 255, 0.62);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.10);
 }
 .dm__field.has-error input,
 .dm__field.has-error textarea {
@@ -178,7 +176,8 @@
   margin: 0 auto 20px;
   border-radius: 50%;
   color: #fff;
-  background: linear-gradient(140deg, var(--purple2), var(--lilac));
+  color: #111315;
+  background: linear-gradient(140deg, #f4f5f6, #aeb4bc);
   box-shadow: var(--glow-purple);
 }
 .dm__doneTitle {
@@ -237,7 +236,7 @@ dialog.dm__overlay::backdrop {
 }
 .dm__card {
   border-radius: 24px;
-  border-color: #c4a6ff35;
+  border-color: #ffffff32;
 }
 .dm__title {
   font-weight: 500;

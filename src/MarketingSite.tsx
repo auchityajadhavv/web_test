@@ -11,8 +11,6 @@ import Cta from "./components/Cta";
 import Footer from "./components/Footer";
 import DemoModal from "./components/DemoModal";
 
-import DeferredMap from "./components/DeferredMap";
-
 export default function MarketingSite() {
   return (
     <>
@@ -28,7 +26,6 @@ export default function MarketingSite() {
         <TapToReview />
         <WhyReviews />
         <WhyRevora />
-        <DeferredMap />
         <Pricing />
         <Faq />
         <Cta />

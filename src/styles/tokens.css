@@ -1,6 +1,6 @@
 /* Neutral graphite and silver identity. */
 :root {
-  /* ---- UI (purple + black) ---- */
+  /* ---- UI (graphite + silver) ---- */
   --bg: #101112;
   --bg-grad: radial-gradient(
     105% 90% at 60% 30%,
@@ -23,7 +23,7 @@
   --text2: #b9bdc2;
   --text3: #a1a6ac;
 
-  /* pale-lavender pill button, dark text */
+  /* silver pill button, dark text */
   --btn: linear-gradient(92deg, #eceff2, #aeb4bc);
   --btn-text: #0c0a14;
 
@@ -48,7 +48,7 @@
 
   /* shadows / glow */
   --shadow-card: 0 24px 60px -20px rgba(0, 0, 0, 0.7);
-  --glow-purple: 0 0 40px -8px rgba(124, 58, 237, 0.55);
+  --glow-purple: 0 0 40px -8px rgba(255, 255, 255, 0.22);
 
   /* motion (ui-ux-pro-max tiers) */
   --ease-signature: cubic-bezier(0.16, 1, 0.3, 1); /* Expo.out — big moments */
@@ -57,15 +57,15 @@
   --dur-reveal: 0.5s;
 }
 
-/* recurring structural device: gold→transparent hairline (echoes card trim + field lines) */
+/* recurring structural device: white LED edge */
 .hairline {
   height: 1px;
   border: 0;
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(201, 162, 75, 0.45) 30%,
-    rgba(201, 162, 75, 0.2) 70%,
+    rgba(255, 255, 255, 0.44) 30%,
+    rgba(255, 255, 255, 0.16) 70%,
     transparent
   );
 }

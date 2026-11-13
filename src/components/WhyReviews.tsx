@@ -55,9 +55,9 @@ export default function WhyReviews() {
           <p className="wr__question">How was your experience?</p>
           <div className="wr__responses">
             {[
-              { label: "The food", value: "Loved it", width: "88%" },
-              { label: "The service", value: "Thoughtful", width: "80%" },
-              { label: "The atmosphere", value: "Just right", width: "92%" },
+              { label: "Service", value: "Thoughtful", width: "88%" },
+              { label: "Quality", value: "Excellent", width: "91%" },
+              { label: "Overall experience", value: "Great", width: "86%" },
             ].map((row) => (
               <div className="wr__response" key={row.label}>
                 <div>
@@ -73,8 +73,8 @@ export default function WhyReviews() {
           <div className="wr__draft">
             <span className="mono">A DRAFT, IN YOUR WORDS</span>
             <p>
-              “A lovely place to slow down. The food was full of flavour, and
-              the team made us feel welcome.”
+              “A polished experience from start to finish. The team was
+              thoughtful, and the quality really stood out.”
             </p>
             <span>Edit it. Make it yours. Share only if you want to.</span>
           </div>

@@ -3,7 +3,6 @@
   transform: translateY(12px);
   transition: opacity var(--dur-reveal) var(--ease-out),
     transform var(--dur-reveal) var(--ease-out);
-  will-change: opacity, transform;
 }
 
 .reveal.is-in {
